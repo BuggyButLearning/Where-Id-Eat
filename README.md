@@ -1,6 +1,6 @@
 # Where I’d Eat
 
-![Where I’d Eat banner](assets/where-id-eat-banner.png)
+![Where I’d Eat banner](assets/where-id-eat-banner.svg)
 
 **Personalized, location-centered food guides that rank what is actually worth eating near where you are staying.**
 
@@ -101,7 +101,7 @@ The two versions are tuned for their respective agent environments while followi
 where-id-eat/
 ├── README.md
 ├── assets/
-│   └── where-id-eat-banner.png
+│   └── where-id-eat-banner.svg
 ├── examples/
 │   └── detroit-dinner-example.html
 ├── template/
