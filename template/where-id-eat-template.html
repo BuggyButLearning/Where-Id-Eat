@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{GUIDE_TITLE}}</title>
+<style>
+:root{--bg:#0e1116;--panel:#161b22;--panel2:#1d2430;--text:#f6f2ea;--muted:#aeb8c5;--line:#303946;--gold:#d8ac52;--green:#63c08d;--red:#e36f6f;--blue:#77b7ff;--coffee:#c6925b;--dessert:#d888b5}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}a{color:#9bcaff}a:hover{color:#fff}.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 80px}.hero{background:linear-gradient(135deg,#202630,#12161c);border:1px solid var(--line);border-radius:22px;padding:32px;box-shadow:0 18px 50px rgba(0,0,0,.28)}h1{margin:0 0 8px;font-size:clamp(2rem,5vw,4.1rem);line-height:1;letter-spacing:-.04em}.subtitle{color:var(--muted);font-size:1.08rem;margin:0}.hero-image{margin-top:22px;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#222}.hero-image img{width:100%;height:360px;object-fit:cover;display:block}.hero-image figcaption{font-size:.76rem;color:var(--muted);padding:8px 10px;background:#11151a}.hero-grid{display:grid;grid-template-columns:2fr 1fr;gap:22px;margin-top:24px}.callout{background:#231f17;border:1px solid #55462a;border-radius:16px;padding:18px}.callout strong{color:#ffcf6a}.verify{background:#14241b;border:1px solid #2e6546;border-radius:16px;padding:18px}.verify strong{color:#8fe4b2}.nav{position:sticky;top:0;z-index:10;margin:18px 0;padding:12px;border:1px solid var(--line);background:rgba(14,17,22,.95);backdrop-filter:blur(10px);border-radius:14px;display:flex;flex-wrap:wrap;gap:8px}.nav a{text-decoration:none;padding:7px 10px;background:var(--panel2);border-radius:9px;font-size:.88rem}.section{margin-top:30px;scroll-margin-top:90px}.section-title{font-size:1.7rem;margin:0 0 12px}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:14px}table{width:100%;border-collapse:collapse;background:var(--panel)}th,td{text-align:left;padding:12px 13px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#20242b;color:#e9e0cd;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em}tr:last-child td{border-bottom:0}.scorecell{font-size:1.2rem;font-weight:800;color:#ffd16e}.small{color:var(--muted);font-size:.82rem}.quickpick{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:16px}.quickpick>div{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:16px}.quickpick b{color:#ffd16e}.method{color:var(--muted);font-size:.92rem}.restaurant-card{scroll-margin-top:90px;background:var(--panel);border:1px solid var(--line);border-radius:20px;margin-top:24px;overflow:hidden;box-shadow:0 14px 38px rgba(0,0,0,.18)}.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:20px 22px 14px;background:#1d2127;border-bottom:1px solid var(--line)}.rankline{display:flex;align-items:center;gap:11px}.rank{display:inline-grid;place-items:center;min-width:34px;height:34px;padding:0 8px;border-radius:999px;background:var(--gold);color:#17120a;font-weight:900}.rank.secondary{background:var(--dessert)}.card-head h2{margin:0;font-size:1.55rem}.badges{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.pill{display:inline-block;border:1px solid #454c57;color:#d9dde4;border-radius:999px;padding:4px 9px;font-size:.78rem}.pill.accent{border-color:#6d572a;background:#292317;color:#ffd477}.pill.score{border-color:#2d6748;background:#17261e;color:#8fe0b0}.pill.verified{border-color:#2d6748;background:#17261e;color:#8fe0b0}.pill.caution{border-color:#7c6736;background:#302816;color:#ffd477}.toplink{font-size:.82rem;white-space:nowrap}.card-grid{display:grid;grid-template-columns:minmax(280px,38%) 1fr;gap:0}.card-grid figure{margin:0;padding:20px;background:#121418}.card-grid figure img{width:100%;height:310px;object-fit:cover;border-radius:14px;display:block;background:#272b32}.card-grid figcaption{color:var(--muted);font-size:.76rem;margin-top:8px}.facts{padding:20px 22px 24px}.mini{background:transparent;margin-bottom:16px}.mini th{width:170px;background:transparent;text-transform:none;letter-spacing:0;color:#bfc6cf;padding-left:0}.mini td{background:transparent;padding-right:0}.facts h3{margin:16px 0 5px;font-size:1rem;color:#f0d497}.facts p{margin:0;color:#e3e5e8}.linkrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.btn{text-decoration:none;background:#315d93;color:white;padding:8px 11px;border-radius:9px;font-size:.82rem;font-weight:700;border:0}.btn.secondary{background:#2a3038;color:#dce6f3}.btn.pink{background:#764b66}.status-ok{color:#91e0ae;font-weight:700}.status-warn{color:#ffd477;font-weight:700}.sources{columns:2;column-gap:30px}.sources li{break-inside:avoid;margin:0 0 8px}.footer{margin-top:38px;color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padding-top:18px}.map-card{background:var(--panel);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 14px 38px rgba(0,0,0,.18)}.map-copy{padding:18px 20px 14px;border-bottom:1px solid var(--line);background:#1d2127}.map-copy p{margin:6px 0 0;color:var(--muted)}#guide-map{width:100%;height:560px;background:#242931}.map-actions{display:flex;flex-wrap:wrap;gap:8px;padding:13px 16px;border-top:1px solid var(--line);background:#15181d}.map-legend{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:12px;color:var(--muted);font-size:.84rem}.legend-item{display:flex;align-items:center;gap:6px}.legend-dot{width:22px;height:22px;border-radius:50%;display:inline-grid;place-items:center;font-size:.67rem;font-weight:900;border:2px solid rgba(255,255,255,.9);box-shadow:0 1px 6px rgba(0,0,0,.35)}.legend-dot.hotel{background:#d5a84d;color:#17120a}.legend-dot.pick{background:#315d93;color:#fff}.legend-dot.secondary{background:#b85e91;color:#fff}.map-marker{width:30px;height:30px;border-radius:50%;background:#315d93;color:#fff;border:2px solid #fff;display:grid;place-items:center;font-weight:900;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.45)}.map-marker.hotel{width:38px;height:38px;background:#d5a84d;color:#17120a;border-color:#fff3cc;font-size:12px}.map-marker.secondary{background:#b85e91;font-size:11px}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#171a1f;color:#f4f2ed}.leaflet-popup-content{margin:13px 15px;line-height:1.45;min-width:190px}.leaflet-popup-content a{color:#9bc7ff}.leaflet-control-attribution{font-size:10px}.checklist{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px}.check{background:#141920;border:1px solid var(--line);padding:14px;border-radius:12px}.check b{display:block;color:#e9cf93;margin-bottom:4px}.template-note{background:#16202d;border:1px dashed #55769b;border-radius:12px;padding:14px;color:#c8d8e9}.placeholder{color:#91b7e3;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+@media(max-width:850px){.hero-grid,.card-grid,.quickpick{grid-template-columns:1fr}.nav{position:static}.sources{columns:1}.hero-image img{height:240px}.card-grid figure img{height:260px}#guide-map{height:480px}}
+@media print{body{background:#fff;color:#111}.wrap{max-width:none;padding:0}.hero,.restaurant-card,.tablewrap,.map-card{box-shadow:none;border-color:#bbb}.nav{display:none}.restaurant-card{break-inside:avoid-page}a{color:#111}.btn{border:1px solid #888;background:#fff;color:#111}.hero-image img{height:250px}}
+</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+</head>
+<body>
+<div class="wrap" id="top">
+<header class="hero">
+  <h1>{{GUIDE_TITLE}}</h1>
+  <p class="subtitle">{{MEAL_LABEL}} • {{GUIDE_DATE}} • Centered on {{ANCHOR_NAME}}, {{CITY}} • Ranked for quality, local distinctiveness, value, and practical travel from the anchor</p>
+  <figure class="hero-image">
+    <img src="{{HERO_IMAGE_URL}}" alt="{{HERO_IMAGE_ALT}}" onerror="this.style.display='none'">
+    <figcaption>Photo: {{HERO_IMAGE_CREDIT}}. Use a location-specific image with a source link or local file asset.</figcaption>
+  </figure>
+  <div class="hero-grid">
+    <div class="callout"><strong>Best first move:</strong> {{TOP_PICK_SUMMARY}}</div>
+    <div class="verify"><strong>Availability check:</strong> {{VERIFICATION_SUMMARY}} Closed or conflicting candidates are excluded from the ranked list rather than placed in a separate correction section.</div>
+  </div>
+</header>
+<nav class="nav">
+  <a href="#map">Map</a><a href="#compare">Compare</a><a href="#primary">Meal picks</a><a href="#secondary">{{SECONDARY_SECTION_LABEL}}</a><a href="#method">How this was scored</a><a href="#sources">Sources</a>
+</nav>
+<section class="section" id="map">
+  <h2 class="section-title">Anchor-centered map</h2>
+  <div class="map-card"><div class="map-copy"><strong>{{ANCHOR_NAME}} is the map center.</strong><p>Meal markers use numbers. {{SECONDARY_SECTION_LABEL}} markers use S1, S2, and so on. Tap a marker for score, distance, details, and directions.</p>
+    <div class="map-legend"><span class="legend-item"><span class="legend-dot hotel">H</span> Anchor</span><span class="legend-item"><span class="legend-dot pick">1</span> Meal pick</span><span class="legend-item"><span class="legend-dot secondary">S1</span> {{SECONDARY_SECTION_LABEL}}</span></div></div>
+    <div id="guide-map" role="img" aria-label="Interactive map centered on the trip anchor"></div>
+    <div class="map-actions"><button class="btn" id="reset-map" type="button">Center on anchor</button><a class="btn secondary" href="{{ANCHOR_MAP_URL}}" target="_blank" rel="noopener">Open anchor in Google Maps</a></div>
+  </div>
+</section>
+<section class="section" id="compare">
+  <h2 class="section-title">Fast decision</h2>
+  <div class="quickpick">{{QUICK_PICK_CARDS}}</div>
+  <p class="method">Fit score is a tailored score, not a copied star average. The report should favor places that do something specific exceptionally well, use local critical sources, incorporate current community signals such as Yelp, and penalize tourist-only or reputation-only picks.</p>
+  <div class="tablewrap"><table><thead><tr><th>Place</th><th>Fit</th><th>Spend</th><th>From anchor</th><th>Walk-in / reservation</th><th>Hours</th><th>Availability check</th></tr></thead><tbody>{{PRIMARY_COMPARISON_ROWS}}</tbody></table></div>
+</section>
+<main id="primary">{{PRIMARY_PLACE_CARDS}}</main>
+<section class="section" id="secondary">
+  <h2 class="section-title">{{SECONDARY_SECTION_LABEL}}</h2>
+  <p class="method">For dinner, default this section to dessert. For breakfast or lunch, default it to coffee. Give it the same treatment as the main meal list: ranking, images, hours, distance, price, what to order, local signal, Yelp, official site, and same-day verification.</p>
+  <div class="tablewrap"><table><thead><tr><th>Place</th><th>Fit</th><th>Spend</th><th>From anchor</th><th>Hours</th><th>Best reason to go</th><th>Availability check</th></tr></thead><tbody>{{SECONDARY_COMPARISON_ROWS}}</tbody></table></div>
+  {{SECONDARY_PLACE_CARDS}}
+</section>
+<section class="section" id="method">
+  <h2 class="section-title">How this was scored and checked</h2>
+  <div class="checklist">
+    <div class="check"><b>Food quality + focus</b>Prefer specialist mentality, standout dishes, chef execution, and evidence the place is actually good now.</div>
+    <div class="check"><b>Local distinctiveness</b>Reward places that teach the traveler something about the city or are hard to reproduce at home.</div>
+    <div class="check"><b>Current local support</b>Use Eater, Infatuation, local newspapers, local magazines, respected chefs/critics, and recent community signals.</div>
+    <div class="check"><b>Same-day availability</b>Cross-check official hours with a booking platform, live listing, or same-day closure notice when possible. Resolve conflicts before ranking.</div>
+    <div class="check"><b>Traveler friction</b>Include distance, realistic travel time, solo practicality, reservation pressure, and price.</div>
+    <div class="check"><b>Link integrity</b>Every card should include website, menu when available, directions, Yelp, local review, and reservation link when relevant.</div>
+  </div>
+</section>
+<section class="section" id="sources"><h2 class="section-title">Sources checked</h2><ol class="sources">{{SOURCE_LIST_ITEMS}}</ol></section>
+<div class="footer">Generated {{GENERATED_AT}}. Hours and availability can change after the report is generated. Re-check immediately before departure when a closure would be costly.</div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+const anchor={{MAP_ANCHOR_JSON}};
+const primary={{MAP_PRIMARY_JSON}};
+const secondary={{MAP_SECONDARY_JSON}};
+const map=L.map('guide-map',{scrollWheelZoom:false}).setView([anchor.lat,anchor.lng],13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+function markerIcon(label,kind){return L.divIcon({className:'',html:'<div class="map-marker '+kind+'">'+label+'</div>',iconSize:kind==='hotel'?[38,38]:[30,30],iconAnchor:kind==='hotel'?[19,19]:[15,15],popupAnchor:[0,-17]})}
+function dir(dest){return 'https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(anchor.address)+'&destination='+encodeURIComponent(dest)}
+[1609.344,3218.688,4828.032].forEach(r=>L.circle([anchor.lat,anchor.lng],{radius:r,color:'#d5a84d',weight:1,opacity:.28,fill:false,dashArray:'5 7',interactive:false}).addTo(map));
+L.marker([anchor.lat,anchor.lng],{icon:markerIcon('H','hotel'),zIndexOffset:1000}).addTo(map).bindPopup('<strong>'+anchor.name+'</strong><br>'+anchor.address+'<br><span style="color:#ffd16e">Map center</span>');
+primary.forEach(p=>L.marker([p.lat,p.lng],{icon:markerIcon(String(p.rank),'')}).addTo(map).bindPopup('<strong>'+p.rank+'. '+p.name+'</strong><br>Fit '+p.score+'/10<br>'+p.distance+'<br><a href="#'+p.anchor+'">View details</a><br><a href="'+dir(p.address)+'" target="_blank">Directions</a>'));
+secondary.forEach((p,i)=>L.marker([p.lat,p.lng],{icon:markerIcon('S'+(i+1),'secondary')}).addTo(map).bindPopup('<strong>'+p.name+'</strong><br>Fit '+p.score+'/10<br>'+p.distance+'<br><a href="#'+p.anchor+'">View details</a><br><a href="'+dir(p.address)+'" target="_blank">Directions</a>'));
+document.getElementById('reset-map').addEventListener('click',()=>map.setView([anchor.lat,anchor.lng],13));
+</script>
+</body></html>
