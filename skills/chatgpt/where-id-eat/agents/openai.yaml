@@ -1,3 +1,3 @@
 name: Where I’d Eat
-description: Build a personalized, location-centered food guide around a hotel or other anchor, with ranked breakfast, lunch, or dinner picks plus dessert or coffee, live availability checks, maps, images, prices, Yelp, official links, and practical travel guidance.
-version: 1.0.0
+description: Run a predictable location-centered food guide command using strict research JSON, deterministic rendering, live availability checks, real images, Yelp resolution, maps, and coffee or dessert companions.
+version: 2.0.0
