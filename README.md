@@ -1,6 +1,6 @@
 # Where I’d Eat
 
-![Where I’d Eat](assets/where-id-eat-banner.jpg)
+![Where I’d Eat](assets/where-id-eat-banner.webp)
 
 **Food worth leaving your hotel for.**
 
