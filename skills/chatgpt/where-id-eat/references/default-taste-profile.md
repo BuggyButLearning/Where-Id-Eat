@@ -1,25 +1,14 @@
 # Default Taste Profile
 
-Use this profile unless the user asks for a preference interview.
+Use `profiles/default.json` in a repository checkout or `runtime/profiles/default.json` in an installed package as the machine-readable source of truth.
 
-Prioritize:
+Default weighting:
 
-1. Excellent execution over prestige or price.
-2. Restaurants with a clear specialty, point of view, or standout dish.
-3. Food that feels specific to the destination and is harder to replace at home.
-4. Strong current local editorial support, then current community signals such as Yelp.
-5. Good value for the quality, not merely low price.
-6. Short walks or rides from the anchor, while allowing a longer trip when the food payoff is substantial.
-7. Practical solo dining, walk-in odds, bar or counter seating, and low reservation friction when relevant.
-8. Newer openings when they are genuinely strong, without rewarding novelty by itself.
+- 40% food execution
+- 20% destination distinctiveness
+- 15% current local support
+- 10% value
+- 10% travel friction
+- 5% current availability
 
-Penalize:
-
-- generic menus that could be anywhere
-- tourist traps and reputation-only picks
-- places carried mostly by decor or hype
-- weak value relative to nearby alternatives
-- inconvenient trips without a meaningful food payoff
-- places with unresolved same-day availability conflicts
-
-Do not assume fine dining is better than a specialist sandwich shop, bakery, noodle shop, taco stand, or pizzeria. Score the food and the reason to go.
+The profile favors specialist mentality, standout dishes, food that feels specific to the destination, current local editorial support, strong value, and trips whose food payoff justifies the travel. It penalizes generic menus, tourist traps, reputation-only picks, hype without execution, weak value, unnecessary travel, and unresolved availability conflicts.
