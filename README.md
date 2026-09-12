@@ -4,92 +4,109 @@
 
 **Food worth leaving your hotel for.**
 
-Where I’d Eat turns a hotel, Airbnb, venue, or address into a ranked food guide for a specific meal and date.
+Where I’d Eat builds a ranked food guide around a hotel, Airbnb, venue, landmark, or address for a specific meal and date.
+
+Version 2 uses a fixed pipeline so ChatGPT and Claude research the food, but do not improvise the report format:
+
+```text
+research -> strict JSON -> canonical renderer -> validators -> HTML
+```
+
+That keeps maps, tables, cards, images, Yelp data, availability checks, coffee or dessert, and section order consistent from report to report.
 
 ## What it does
 
-- Asks whether you want **breakfast, lunch, or dinner**
-- Uses the included taste profile by default, or interviews you to customize it
-- Ranks places by food quality, distinctiveness, local credibility, value, and travel payoff
-- Checks current hours and a second live signal when practical before recommending a place
-- Produces a mobile-friendly HTML guide with maps, photos, prices, what to order, Yelp, official sites, menus, reservations, directions, and local editorial sources
-
-| Meal | Companion section |
-| --- | --- |
-| Breakfast | Coffee |
-| Lunch | Coffee |
-| Dinner | Dessert |
-
-The coffee or dessert section is researched and ranked with the same standards as the main meal guide.
+- Breakfast, lunch, or dinner centered on one anchor
+- Default taste profile or a short preference interview
+- Minimum 5 meal picks and 4 companion picks
+- Dinner adds Dessert; breakfast and lunch add Coffee
+- Official hours plus a second current availability signal
+- Real restaurant photography with source credit
+- Direct Yelp business links and verified ratings when available
+- Official site, menu, directions, reservations, and local editorial sources
+- Anchor-centered interactive map and mobile-friendly HTML
 
 ## Install
 
-Clone the repo first:
+Clone the repo:
 
 ```bash
 git clone https://github.com/BuggyButLearning/Where-Id-Eat.git
 cd Where-Id-Eat
 ```
 
-### ChatGPT
-
-Where ChatGPT Skills are available, OpenAI supports uploading a skill from **Plugins → Skills → Create → Upload from your computer**.
-
-Package the ChatGPT version:
+Build self-contained skill packages:
 
 ```bash
-cd skills/chatgpt
-zip -r where-id-eat.zip where-id-eat
+python tools/package_skills.py
 ```
 
-Upload `skills/chatgpt/where-id-eat.zip` in the Skills UI.
+This creates:
+
+```text
+dist/chatgpt/where-id-eat.zip
+dist/claude/where-id-eat.zip
+```
+
+### ChatGPT
+
+Upload `dist/chatgpt/where-id-eat.zip` in the ChatGPT Skills UI.
 
 ### Claude Code
 
-Install for your user account:
+Unzip the Claude package into your user skills directory:
 
 ```bash
 mkdir -p ~/.claude/skills
-cp -R skills/claude/where-id-eat ~/.claude/skills/
+unzip dist/claude/where-id-eat.zip -d ~/.claude/skills
 ```
 
-Or install only for the current project:
-
-```bash
-mkdir -p .claude/skills
-cp -R skills/claude/where-id-eat .claude/skills/
-```
+For a project-only install, unzip it under `.claude/skills` instead.
 
 ## Use it
 
-Ask naturally. For example:
+Ask naturally:
 
 ```text
-Use Where I’d Eat for dinner tomorrow near my hotel in Portland.
+Use Where I’d Eat for lunch tomorrow around the Aquarium of the Pacific.
 ```
+
+Or think of the normalized command as:
 
 ```text
-Build me a lunch guide around the convention center. Interview me about my tastes first.
+/where-id-eat anchor="Aquarium of the Pacific" meal=lunch date=2026-09-12 profile=default
 ```
 
-The skill will resolve the anchor location, date, meal, and preference mode before researching.
-
-## What’s included
-
-- [`skills/chatgpt/where-id-eat/`](skills/chatgpt/where-id-eat/) — ChatGPT version
-- [`skills/claude/where-id-eat/`](skills/claude/where-id-eat/) — Claude version
-- [`template/where-id-eat-template.html`](template/where-id-eat-template.html) — reusable report template
-- [`examples/detroit-dinner-example.html`](examples/detroit-dinner-example.html) — example dinner guide
-
-The default taste profile favors focused restaurants, standout dishes, food specific to the destination, current local critical support, good value, and places worth a short trip. The skill can replace that profile with a short preference interview.
-
-## Validation
-
-Before delivery, generated reports should pass the included validator:
+The skill first researches into `report.json`. The final report is built with the canonical command:
 
 ```bash
-python skills/chatgpt/where-id-eat/scripts/validate_report.py examples/detroit-dinner-example.html
+python bin/where-id-eat build report.json report.html
 ```
+
+Installed skill packages use:
+
+```bash
+python runtime/bin/where-id-eat build report.json report.html
+```
+
+## Contract
+
+The source of truth is [`schema/report.schema.json`](schema/report.schema.json). The renderer sorts by one final score and assigns ranks, so the displayed score and rank cannot disagree.
+
+The validators fail reports with missing required sections, too few recommendations, generated/base64 restaurant placeholders, missing links, unresolved anchors, incomplete availability evidence, map/card count mismatches, or invalid Yelp state.
+
+The default ranking profile is [`profiles/default.json`](profiles/default.json).
+
+## Included
+
+- [`schema/report.schema.json`](schema/report.schema.json) strict research contract
+- [`renderer/`](renderer/) fixed HTML renderer and template
+- [`validators/`](validators/) data and HTML validators
+- [`profiles/default.json`](profiles/default.json) default taste model
+- [`bin/where-id-eat`](bin/where-id-eat) build command
+- [`skills/chatgpt/where-id-eat/`](skills/chatgpt/where-id-eat/) ChatGPT skill
+- [`skills/claude/where-id-eat/`](skills/claude/where-id-eat/) Claude skill
+- [`examples/detroit-dinner-example.html`](examples/detroit-dinner-example.html) example guide
 
 ## License
 
