@@ -1,70 +1,76 @@
 ---
 name: where-id-eat
-description: Create reusable, polished travel dining reports centered on a hotel or other anchor, with ranked breakfast/lunch/dinner picks, live availability checks, an interactive map, images, prices, distance and solo logistics, Yelp and official links, and a full dessert or coffee companion section. Use for restaurant discovery, city food guides, trip meal planning, hotel-nearby food searches, and HTML dining-report generation.
+description: Run the Where I’d Eat command to research and build a predictable location-centered breakfast, lunch, or dinner guide. Produces validated JSON first, then uses the canonical renderer for fixed HTML structure, real restaurant images, Yelp resolution, current availability checks, an anchor-centered map, and a full coffee or dessert companion section.
 ---
 
 # Where I’d Eat
 
-Build a complete HTML food guide around a central location.
+Treat this as a command, not a free-form report-writing prompt.
 
-## Inputs
+## 1. Resolve the command
 
-Resolve these before research, asking only when missing:
+Normalize the user request into these inputs before research:
 
-1. Central anchor: hotel, address, venue, neighborhood, or landmark.
-2. Target date or day.
-3. Meal: ask **breakfast, lunch, or dinner**.
-4. Preference mode: offer **use the default taste profile** or **interview me to customize it**.
+- `anchor`: hotel, address, venue, neighborhood, or landmark
+- `date`
+- `meal`: `breakfast`, `lunch`, or `dinner`
+- `profile`: default unless the user asks to customize
+- `preference_mode`: `default` or `interview`
+- `primary_count`: default 6, minimum 5
+- `companion_count`: default 4, minimum 4
+- optional party size, budget, and maximum travel time
 
-If the user selects the interview, ask a short batch of questions covering budget, maximum ride time, dietary restrictions, cuisines or foods to avoid, reservation tolerance, and whether to favor local institutions, newer openings, specialist shops, or a balanced mix.
+If meal is missing, ask breakfast, lunch, or dinner. If preference mode is not specified, offer the default taste profile or a short interview. The interview should cover budget, travel tolerance, dietary constraints, cuisines to seek or avoid, reservation tolerance, and whether to favor local institutions, newer openings, specialists, or a mix.
 
-Read `references/default-taste-profile.md` for the default preferences and `references/report-spec.md` for the non-negotiable output structure.
+Dinner always uses Dessert as the companion section. Breakfast and lunch always use Coffee.
 
-## Research and ranking
+## 2. Research only
 
-Use current web/local-search tools when freshness matters. Build a broad candidate list before ranking. Weight food quality and focus first, then destination-specific character, current local critical support, standout dishes, value, and logistics from the anchor. Use recent local sources before generic national listicles.
+Do not write HTML during research. Build a broad candidate set, verify the active candidates, then populate the v2 report data contract.
 
-Always include a Yelp link. Use a numeric Yelp score only if the tool can verify it directly. Never infer or invent it.
+Use current local and web sources. Prefer official restaurant information plus respected local editorial sources. Yelp is a community signal, not the ranking authority.
 
-For a date-specific guide, cross-check official hours with at least one live signal when practical: reservation inventory, structured business hours, same-day social/closure notice, or another current listing. If the evidence conflicts and cannot be resolved, exclude the place from the active ranking. Do not create a separate correction section.
+For every active recommendation:
 
-Prefer places with a specialist mentality and a clear reason to exist. Penalize tourist traps, generic menus, reputation-only picks, and places that are inconvenient without enough culinary payoff.
+- verify official hours for the requested date
+- obtain a second independent current signal such as a live business listing, reservation inventory, or same-day notice
+- resolve the direct Yelp business page when possible
+- use a numeric Yelp rating only when directly verified
+- obtain a real restaurant or food photograph, preferring official photography and then reputable editorial photography
+- never generate a restaurant title card, gradient placeholder, base64 SVG, or fake restaurant image
+- if no real image can be verified, explicitly use the standardized repository fallback and accept the validator warning
+- include official website, directions, at least one local editorial source, menu when available, and reservation link when relevant
 
-## Meal-specific companion section
+Exclude unresolved closures from the active ranking.
 
-- Dinner: create a **Dessert** section by default.
-- Breakfast: create a **Coffee** section by default.
-- Lunch: create a **Coffee** section by default.
+## 3. Produce strict JSON
 
-Research and present the companion section with the same core fields, links, images, verification, ranking logic, and map treatment as the main meal list.
+Write the research to a JSON file that conforms to `schema/report.schema.json` in the repo, or `runtime/schema/report.schema.json` in an installed package.
 
-## Build the artifact
+Do not manually assign ranks. Supply one final `score` per recommendation. The renderer sorts by score and assigns ranks so score and rank cannot disagree.
 
-Start from the repository template at `template/where-id-eat-template.html` when available. Populate a location-specific header image under the title, quick picks, anchor-centered Leaflet map, comparison tables, detailed recommendation cards, companion section, methodology, source list, and generated timestamp.
+Use `profiles/default.json` or `runtime/profiles/default.json` for the default weighting.
 
-Keep the map initially centered on the anchor. Use numbered markers for the meal ranking and distinct markers for dessert/coffee. Link marker popups back to internal report anchors and to live Google Maps directions.
+## 4. Build with the canonical command
 
-Each recommendation card must contain:
+Do not hand-author the final HTML.
 
-- rank and tailored fit score
-- cuisine/specialty and standout reason
-- image with alt text and credit
-- spend estimate
-- distance and practical travel time from anchor
-- requested-day hours
-- availability verification status
-- solo/walk-in/reservation guidance
-- specific order suggestions
-- current local/critical signal
-- official Website
-- Menu when available
-- Directions from anchor
-- Yelp
-- local editorial source
-- Reservation when relevant
+Repository checkout:
 
-Do not include handwritten-note analysis, a local-list-check section, or an "Important correction: unavailable tonight" section. The active rankings should already reflect the availability check.
+```bash
+python bin/where-id-eat build report.json report.html
+```
 
-## Final checks
+Installed skill package:
 
-Run `scripts/validate_report.py <report.html>` and fix every issue. Confirm the companion section is substantive rather than a token list. Confirm every internal anchor resolves. Confirm remote images have alt text and an onerror fallback. If live URL testing is available, test the hero image and recommendation image URLs before delivery.
+```bash
+python runtime/bin/where-id-eat build report.json report.html
+```
+
+The command performs data validation, deterministic rendering, and HTML validation. Fix every error before delivery. Warnings are allowed only when they accurately describe an unavoidable fallback such as an unresolved direct Yelp page or standardized image fallback.
+
+## 5. Deliver
+
+Return the rendered HTML artifact. Do not substitute a prose-only list when the user requested a guide.
+
+The canonical renderer owns the section order, tables, cards, buttons, map, scoring explanation, and companion section. Do not add, remove, reorder, or redesign report sections in the generated HTML.
