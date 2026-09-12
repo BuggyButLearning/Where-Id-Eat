@@ -1,0 +1,41 @@
+{
+  "name": "default",
+  "version": "2.0",
+  "description": "Default Where I'd Eat ranking profile.",
+  "weights": {
+    "food_execution": 0.40,
+    "distinctiveness": 0.20,
+    "local_support": 0.15,
+    "value": 0.10,
+    "travel_friction": 0.10,
+    "current_availability": 0.05
+  },
+  "priorities": [
+    "Excellent execution over prestige or price",
+    "Clear specialty, point of view, or standout dish",
+    "Food specific to the destination and harder to replace at home",
+    "Strong current local editorial support, then community signals such as Yelp",
+    "Good value for the quality",
+    "Short walks or rides unless a longer trip has a meaningful food payoff",
+    "Practical solo dining and low reservation friction when relevant",
+    "New openings only when current evidence supports the quality"
+  ],
+  "penalties": [
+    "Generic menus that could be anywhere",
+    "Tourist traps and reputation-only picks",
+    "Places carried mainly by decor or hype",
+    "Weak value relative to nearby alternatives",
+    "Inconvenient trips without meaningful food payoff",
+    "Unresolved same-day availability conflicts"
+  ],
+  "hard_rules": {
+    "minimum_primary": 5,
+    "minimum_companion": 4,
+    "require_two_availability_sources": true,
+    "require_real_recommendation_images": true,
+    "require_yelp_resolution": true,
+    "dinner_companion": "Dessert",
+    "breakfast_companion": "Coffee",
+    "lunch_companion": "Coffee"
+  }
+}
