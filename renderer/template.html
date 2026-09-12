@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="where-id-eat-primary-count" content="@@PRIMARY_COUNT@@">
+<meta name="where-id-eat-companion-count" content="@@COMPANION_COUNT@@">
+<title>@@TITLE@@</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<style>
+:root{--bg:#0e1116;--panel:#161b22;--panel2:#1d2430;--text:#f6f2ea;--muted:#aeb8c5;--line:#303946;--gold:#d8ac52;--green:#63c08d;--blue:#315d93;--comp:#b85e91}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:#9bcaff}.wrap{max-width:1180px;margin:auto;padding:24px 18px 72px}.hero,.card,.tablewrap,.map-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden}.hero-copy{padding:28px}.hero h1{font-size:clamp(2.2rem,6vw,4.4rem);line-height:1;margin:0 0 8px}.subtitle,.muted,.method{color:var(--muted)}.hero figure{margin:0}.hero figure img{width:100%;height:390px;object-fit:cover;display:block}.caption{padding:8px 12px;font-size:.76rem;color:var(--muted);background:#11151a}.hero-grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;padding:18px}.box{padding:16px;background:#171c24;border:1px solid var(--line);border-radius:14px}.box strong{color:#f1cd7d}.nav{display:flex;gap:8px;flex-wrap:wrap;position:sticky;top:0;z-index:20;background:#0e1116ed;padding:12px 0}.nav a{background:var(--panel2);padding:7px 10px;border-radius:9px;text-decoration:none;font-size:.88rem}.section{margin-top:30px;scroll-margin-top:72px}.section h2{font-size:1.65rem;margin:0 0 12px}.quickpick{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:16px}.quickpick>div{padding:15px;background:var(--panel);border:1px solid var(--line);border-radius:14px}.quickpick b{color:#ffd16e}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:900px}th,td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#20242b;color:#e9e0cd;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}.score{font-weight:900;color:#ffd16e;font-size:1.1rem}.cards{display:grid;gap:18px}.card{scroll-margin-top:72px}.card-head{padding:18px 20px 12px;border-bottom:1px solid var(--line);background:#1d2127}.rankline{display:flex;align-items:center;gap:10px}.rank{display:grid;place-items:center;min-width:34px;height:34px;padding:0 8px;border-radius:999px;background:var(--gold);color:#17120a;font-weight:900}.rank.companion{background:var(--comp);color:white}.card h3{font-size:1.5rem;margin:0}.badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.pill{border:1px solid #454c57;border-radius:999px;padding:4px 8px;font-size:.76rem}.pill.ok{border-color:#2d6748;background:#17261e;color:#8fe0b0}.card-grid{display:grid;grid-template-columns:minmax(280px,38%) 1fr}.photo{margin:0;padding:18px;background:#121418}.photo img{width:100%;height:320px;object-fit:cover;border-radius:13px;display:block}.facts{padding:18px 20px 22px}.factgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 18px;margin-bottom:16px}.fact{border-bottom:1px solid #252c36;padding:6px 0}.fact b{display:block;color:#bfc6cf;font-size:.78rem}.facts h4{margin:14px 0 4px;color:#f0d497}.facts p,.facts ul{margin:0}.facts ul{padding-left:20px}.links{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.btn{text-decoration:none;background:var(--blue);color:white;padding:8px 10px;border-radius:8px;font-size:.8rem;font-weight:700}.btn.secondary{background:#2a3038}.btn.companion{background:#764b66}.yelp-line{margin-top:7px;color:#e7d3a2;font-size:.86rem}.map-card{overflow:hidden}.map-copy{padding:16px 18px;border-bottom:1px solid var(--line);background:#1d2127}#guide-map{height:540px;background:#252b34}.map-actions{padding:12px 16px;border-top:1px solid var(--line)}.map-marker{width:30px;height:30px;border-radius:50%;background:var(--blue);border:2px solid white;color:white;display:grid;place-items:center;font-weight:900}.map-marker.anchor{width:38px;height:38px;background:var(--gold);color:#17120a}.map-marker.companion{background:var(--comp);font-size:11px}.sources{columns:2;column-gap:26px}.sources li{break-inside:avoid;margin-bottom:7px}.footer{margin-top:34px;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:.82rem}
+@media(max-width:850px){.hero-grid,.card-grid{grid-template-columns:1fr}.hero figure img{height:260px}.photo img{height:260px}.factgrid{grid-template-columns:1fr}.nav{position:static}.sources{columns:1}#guide-map{height:470px}}
+@media print{body{background:white;color:#111}.wrap{max-width:none}.nav{display:none}.hero,.card,.tablewrap,.map-card{box-shadow:none}.btn{background:white;color:#111;border:1px solid #999}}
+</style>
+</head>
+<body>
+<div class="wrap" id="top">
+<header class="hero">
+  <div class="hero-copy"><h1>@@TITLE@@</h1><p class="subtitle">@@SUBTITLE@@</p></div>
+  @@HERO@@
+  <div class="hero-grid"><div class="box"><strong>Best first move:</strong> @@TOP_PICK@@</div><div class="box"><strong>Availability:</strong> @@VERIFICATION@@</div></div>
+</header>
+<nav class="nav"><a href="#best-bets">Best bets</a><a href="#map">Map</a><a href="#compare">Compare</a><a href="#primary">Meal picks</a><a href="#companion">@@COMPANION_LABEL@@</a><a href="#method">Method</a><a href="#sources">Sources</a></nav>
+<section class="section" id="best-bets"><h2>Best bets</h2><div class="quickpick">@@QUICK_PICKS@@</div></section>
+<section class="section" id="map"><h2>Anchor centered map</h2><div class="map-card"><div class="map-copy"><strong>@@ANCHOR_NAME@@ is the map center.</strong><p class="muted">Meal markers use numbers. @@COMPANION_LABEL@@ markers use C1, C2, and so on.</p></div><div id="guide-map"></div><div class="map-actions"><a class="btn secondary" href="@@ANCHOR_MAP_URL@@" target="_blank" rel="noopener">Open anchor in Google Maps</a></div></div></section>
+<section class="section" id="compare"><h2>Primary comparison</h2><div class="tablewrap"><table><thead><tr><th>Place</th><th>Score</th><th>Spend</th><th>From anchor</th><th>Hours</th><th>Yelp</th><th>Availability</th></tr></thead><tbody>@@PRIMARY_ROWS@@</tbody></table></div></section>
+<main class="section" id="primary"><h2>Meal picks</h2><div class="cards">@@PRIMARY_CARDS@@</div></main>
+<section class="section" id="companion"><h2>@@COMPANION_LABEL@@</h2><p class="method">The companion section uses the same research, image, source, availability, and ranking rules as the meal list.</p><div class="tablewrap"><table><thead><tr><th>Place</th><th>Score</th><th>Spend</th><th>From anchor</th><th>Hours</th><th>Yelp</th><th>Availability</th></tr></thead><tbody>@@COMPANION_ROWS@@</tbody></table></div><div class="cards" style="margin-top:18px">@@COMPANION_CARDS@@</div></section>
+<section class="section" id="method"><h2>How recommendations were chosen</h2><p class="method">Where I’d Eat uses one final score so displayed score and rank cannot disagree. The default profile weights food execution 40%, destination distinctiveness 20%, current local support 15%, value 10%, travel friction 10%, and current availability 5%. Date specific reports require official hours plus a second current signal before an active recommendation is marked verified.</p></section>
+<section class="section" id="sources"><h2>Sources</h2><ol class="sources">@@SOURCES@@</ol></section>
+<div class="footer">Generated and verified @@GENERATED_AT@@. Recheck live hours immediately before departure when timing is tight.</div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script id="where-id-eat-map-data" type="application/json">@@MAP_DATA@@</script>
+<script>
+const d=JSON.parse(document.getElementById('where-id-eat-map-data').textContent);
+const map=L.map('guide-map',{scrollWheelZoom:false}).setView([d.anchor.lat,d.anchor.lng],13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+function icon(label,kind){return L.divIcon({className:'',html:'<div class="map-marker '+kind+'">'+label+'</div>',iconSize:[38,38],iconAnchor:[19,19]})}
+L.marker([d.anchor.lat,d.anchor.lng],{icon:icon('A','anchor')}).addTo(map).bindPopup('<b>'+d.anchor.name+'</b>');
+for(const p of d.primary){L.marker([p.lat,p.lng],{icon:icon(String(p.rank),'')}).addTo(map).bindPopup('<b>'+p.name+'</b><br>Score '+p.score+'<br><a href="#'+p.id+'">Details</a>');}
+for(const p of d.companion){L.marker([p.lat,p.lng],{icon:icon('C'+p.rank,'companion')}).addTo(map).bindPopup('<b>'+p.name+'</b><br>Score '+p.score+'<br><a href="#'+p.id+'">Details</a>');}
+</script>
+</body>
+</html>
