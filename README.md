@@ -1,179 +1,96 @@
 # Where I’d Eat
 
-![Where I’d Eat banner](assets/where-id-eat-banner.svg)
+![Where I’d Eat](assets/where-id-eat-banner.jpg)
 
-**Personalized, location-centered food guides that rank what is actually worth eating near where you are staying.**
+**Food worth leaving your hotel for.**
 
-Where I’d Eat is a reusable research and reporting skill for building practical food guides around a central location such as a hotel, Airbnb, conference venue, neighborhood, or address.
+Where I’d Eat turns a hotel, Airbnb, venue, or address into a ranked food guide for a specific meal and date.
 
-Instead of dumping a long list of popular restaurants, it researches the city, checks what is open for the requested meal and date, weighs trusted local sources, and produces a ranked guide with the details you actually need to make a decision.
+## What it does
 
-## What it makes
+- Asks whether you want **breakfast, lunch, or dinner**
+- Uses the included taste profile by default, or interviews you to customize it
+- Ranks places by food quality, distinctiveness, local credibility, value, and travel payoff
+- Checks current hours and a second live signal when practical before recommending a place
+- Produces a mobile-friendly HTML guide with maps, photos, prices, what to order, Yelp, official sites, menus, reservations, directions, and local editorial sources
 
-Each guide can include:
+| Meal | Companion section |
+| --- | --- |
+| Breakfast | Coffee |
+| Lunch | Coffee |
+| Dinner | Dessert |
 
-- A central location, usually a hotel or other trip anchor
-- Ranked restaurant recommendations
-- A hotel-centered interactive map
-- Photos for each recommendation
-- Current hours and same-day availability checks
-- Price range and realistic solo food spend
-- Distance and practical travel time from the anchor
-- What to order
-- Reservation and walk-in guidance
-- Official website and menu links
-- Yelp links
-- Local editorial sources such as Eater, local publications, and trusted critics
-- Google Maps directions
-- A full source section
-- A separate dessert section for dinner
-- A separate coffee section for breakfast and lunch
-- Responsive HTML that works well on a phone
+The coffee or dessert section is researched and ranked with the same standards as the main meal guide.
 
-## The point
+## Install
 
-Most food discovery tools optimize for volume, popularity, proximity, or advertising. Where I’d Eat is designed around a narrower question:
+Clone the repo first:
 
-> If I were staying here, where would I actually eat?
-
-The default taste profile favors strong execution, focused menus, standout dishes, destination-specific food, local critical support, sensible value, and places worth making a short trip for.
-
-It intentionally penalizes generic restaurants that are merely convenient, old reputation that is no longer supported by current signals, and recommendations that do not fit the requested meal.
-
-## Meal behavior
-
-| Meal | Primary guide | Secondary section |
-| --- | --- | --- |
-| Breakfast | Breakfast recommendations | Coffee |
-| Lunch | Lunch recommendations | Coffee |
-| Dinner | Dinner recommendations | Dessert |
-
-If the meal is not specified, the skill asks first.
-
-The skill can use the included default taste profile or interview the user for different preferences, budget, dietary needs, travel tolerance, and dining style.
-
-## Availability is part of the research
-
-A restaurant should not appear as an active recommendation simply because its normal weekly hours say it is open.
-
-For date-specific guides, the skill checks current official hours and, when possible, same-day reservation inventory, closure notices, or other current signals. If a place appears closed or cannot be verified with reasonable confidence, it is removed or clearly flagged before the guide is produced.
-
-This check is part of the recommendation process rather than a correction section added afterward.
-
-## Example
-
-The repository includes a complete Detroit dinner guide centered on a downtown hotel:
-
-[`examples/detroit-dinner-example.html`](examples/detroit-dinner-example.html)
-
-It demonstrates the intended output format, including restaurant rankings, map, images, source links, travel estimates, ordering advice, and a full dessert section.
-
-## Included skills
+```bash
+git clone https://github.com/BuggyButLearning/Where-Id-Eat.git
+cd Where-Id-Eat
+```
 
 ### ChatGPT
 
-`skills/chatgpt/where-id-eat/`
+Where ChatGPT Skills are available, OpenAI supports uploading a skill from **Plugins → Skills → Create → Upload from your computer**.
 
-Includes:
+Package the ChatGPT version:
 
-- `SKILL.md`
-- OpenAI agent metadata
-- Default taste profile
-- Shared report specification
-- HTML validation script
-
-### Claude
-
-`skills/claude/where-id-eat/`
-
-Includes:
-
-- `SKILL.md`
-- Default taste profile
-- Shared report specification
-- HTML validation script
-
-The two versions are tuned for their respective agent environments while following the same research and report rules.
-
-## Repository structure
-
-```text
-where-id-eat/
-├── README.md
-├── assets/
-│   └── where-id-eat-banner.svg
-├── examples/
-│   └── detroit-dinner-example.html
-├── template/
-│   └── where-id-eat-template.html
-└── skills/
-    ├── chatgpt/
-    │   └── where-id-eat/
-    │       ├── SKILL.md
-    │       ├── agents/
-    │       │   └── openai.yaml
-    │       ├── references/
-    │       │   ├── default-taste-profile.md
-    │       │   └── report-spec.md
-    │       └── scripts/
-    │           └── validate_report.py
-    └── claude/
-        └── where-id-eat/
-            ├── SKILL.md
-            ├── references/
-            │   ├── default-taste-profile.md
-            │   └── report-spec.md
-            └── scripts/
-                └── validate_report.py
+```bash
+cd skills/chatgpt
+zip -r where-id-eat.zip where-id-eat
 ```
 
-## Default taste profile
+Upload `skills/chatgpt/where-id-eat.zip` in the Skills UI.
 
-The included default profile is built for someone who:
+### Claude Code
 
-- Cares more about execution than trendiness
-- Likes restaurants with a clear point of view
-- Values one exceptional dish more than a huge menu
-- Wants food that feels specific to the city
-- Uses Yelp as a useful signal, not the sole authority
-- Gives strong weight to respected local writers and publications
-- Is willing to travel a little for a meaningfully better meal
-- Prefers good value over either cheapness or luxury for its own sake
-- Wants practical information, not just restaurant descriptions
+Install for your user account:
 
-The profile is only a default. The skill can interview the user and replace it.
+```bash
+mkdir -p ~/.claude/skills
+cp -R skills/claude/where-id-eat ~/.claude/skills/
+```
 
-## Output format
+Or install only for the current project:
 
-The preferred output is a self-contained HTML guide with:
+```bash
+mkdir -p .claude/skills
+cp -R skills/claude/where-id-eat .claude/skills/
+```
 
-- Strong header image
-- Fast comparison table
-- Internal anchor navigation
-- Interactive map centered on the trip anchor
-- Detailed cards for each recommendation
-- Clearly separated meal and dessert or coffee recommendations
-- Mobile-friendly layout
-- Print-friendly styles
-- Image credits
-- Source links
+## Use it
 
-Use `template/where-id-eat-template.html` as the starting point when building a new report.
+Ask naturally. For example:
+
+```text
+Use Where I’d Eat for dinner tomorrow near my hotel in Portland.
+```
+
+```text
+Build me a lunch guide around the convention center. Interview me about my tastes first.
+```
+
+The skill will resolve the anchor location, date, meal, and preference mode before researching.
+
+## What’s included
+
+- [`skills/chatgpt/where-id-eat/`](skills/chatgpt/where-id-eat/) — ChatGPT version
+- [`skills/claude/where-id-eat/`](skills/claude/where-id-eat/) — Claude version
+- [`template/where-id-eat-template.html`](template/where-id-eat-template.html) — reusable report template
+- [`examples/detroit-dinner-example.html`](examples/detroit-dinner-example.html) — example dinner guide
+
+The default taste profile favors focused restaurants, standout dishes, food specific to the destination, current local critical support, good value, and places worth a short trip. The skill can replace that profile with a short preference interview.
 
 ## Validation
 
-Each skill includes `scripts/validate_report.py` to catch common report problems before delivery, including missing sections, broken internal anchors, malformed structure, and other output issues.
-
-Example:
+Before delivery, generated reports should pass the included validator:
 
 ```bash
 python skills/chatgpt/where-id-eat/scripts/validate_report.py examples/detroit-dinner-example.html
 ```
 
-## Suggested repository description
+## License
 
-> Personalized food guides centered on where you’re staying, with ranked picks, current availability, maps, photos, local sources, Yelp links, coffee, and dessert.
-
-## Status
-
-Early version. The core report format, default taste profile, ChatGPT skill, Claude skill, reusable template, and Detroit example are included.
+MIT. See [`LICENSE`](LICENSE).
