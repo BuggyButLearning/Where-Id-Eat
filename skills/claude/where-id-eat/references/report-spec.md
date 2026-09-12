@@ -1,43 +1,25 @@
-# Where I’d Eat Report Specification
+# Where I’d Eat v2 Report Contract
 
-The report is centered on one anchor, usually a hotel, address, venue, neighborhood, or landmark.
+The report is generated from structured JSON. The model researches; the renderer formats.
 
-## Required sections
+Canonical section order:
 
-1. Title using `Where I’d Eat: <City or Area>` plus meal and date context.
-2. A strong location-appropriate header image directly under the title.
-3. Quick picks for fast decision making.
-4. Interactive Leaflet map initially centered on the anchor.
-5. Ranked comparison table.
-6. Detailed recommendation cards for each main meal pick.
-7. A companion section: Dessert for dinner, Coffee for breakfast or lunch by default.
-8. Methodology and availability-check explanation.
-9. Sources.
+1. Hero
+2. Trip context and verification summary
+3. Best bets
+4. Anchor-centered interactive map
+5. Primary comparison table
+6. Primary recommendation cards
+7. Companion comparison table
+8. Companion recommendation cards
+9. Method
+10. Sources
+11. Generated and verified timestamp
 
-## Each recommendation must include
+Primary lists require at least 5 recommendations. Companion lists require at least 4. Dinner uses Dessert. Breakfast and lunch use Coffee.
 
-- rank and fit score
-- cuisine or specialty
-- why it made the cut
-- image with alt text and source credit
-- typical food spend
-- distance and practical travel time from the anchor
-- requested-day hours
-- availability verification status
-- walk-in / solo / reservation strategy
-- what to order
-- current local or critical signal
-- official website
-- menu when available
-- directions from the anchor
-- Yelp link
-- local editorial source
-- reservation link when relevant
+Every active recommendation requires one final score, real or standardized-fallback image, official website, directions, Yelp resolution, at least one local editorial source, two availability verification sources including the official source, spend, distance/travel time, requested-day hours, ordering guidance, practical strategy, and current signal.
 
-## Availability rule
+Ranks are renderer-generated from final score. Never type ranks into research JSON.
 
-Availability checking is part of the ranking process. Cross-check official hours with a current second signal when practical, such as reservation inventory, a live business listing, or a same-day closure notice. If evidence materially conflicts and cannot be resolved, do not keep the venue in the active ranking. Do not create a separate correction appendix.
-
-## Companion section
-
-Dessert or coffee must be researched and ranked with the same seriousness as the main meal section. Do not reduce it to a small list of names.
+Generated restaurant illustrations, base64 SVG title cards, and generic gradient placeholders are prohibited.
