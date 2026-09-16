@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="t d">
-<title id="t">Where I'd Eat image fallback</title><desc id="d">Neutral branded fallback used only when no real restaurant photograph can be verified.</desc>
-<defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#161b22"/><stop offset="1" stop-color="#252d38"/></linearGradient></defs>
-<rect width="1200" height="800" fill="url(#g)"/><circle cx="600" cy="330" r="92" fill="none" stroke="#d8ac52" stroke-width="10"/><path d="M548 330h104M600 278v104" stroke="#d8ac52" stroke-width="10" stroke-linecap="round"/><text x="600" y="500" text-anchor="middle" fill="#f6f2ea" font-family="Arial,sans-serif" font-size="52" font-weight="700">Image unavailable</text><text x="600" y="560" text-anchor="middle" fill="#aeb8c5" font-family="Arial,sans-serif" font-size="28">Where I’d Eat</text>
-</svg>
