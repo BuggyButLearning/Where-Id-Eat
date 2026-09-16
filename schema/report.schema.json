@@ -181,7 +181,7 @@
             "source_url": {"type": "string", "minLength": 8},
             "credit": {"type": "string", "minLength": 2},
             "alt": {"type": "string", "minLength": 8},
-            "type": {"enum": ["official_restaurant", "official_food", "official_exterior", "editorial_restaurant", "editorial_food", "fallback"]}
+            "type": {"enum": ["official_restaurant", "official_food", "official_exterior", "editorial_restaurant", "editorial_food"]}
           }
         },
         "yelp": {
