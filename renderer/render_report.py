@@ -3,12 +3,38 @@ import argparse
 import html
 import json
 from pathlib import Path
+from urllib.parse import urlparse
 
 TEMPLATE = Path(__file__).resolve().parent / "template.html"
+PHOTO_TYPES={"official_restaurant","official_food","official_exterior","editorial_restaurant","editorial_food"}
+HERO_TYPES={"location_photo","editorial_location_photo","destination_food_photo"}
 
 
 def e(value):
     return html.escape(str(value), quote=True)
+
+
+def is_svg_url(url):
+    u=str(url or '').strip().lower()
+    if u.startswith('data:image/svg') or 'image/svg+xml' in u: return True
+    try:
+        p=urlparse(u)
+        if p.path.endswith(('.svg','.svgz')): return True
+        return any(token in p.query for token in ('format=svg','fm=svg','type=svg','image=svg'))
+    except Exception:
+        return False
+
+
+def require_photo(img, context, allowed_types):
+    url=str(img.get('url',''))
+    if img.get('type') not in allowed_types:
+        raise ValueError(f"{context}: real photography is required; fallback/generated image type is not allowed")
+    if url.startswith('data:image'):
+        raise ValueError(f"{context}: data URI images are not allowed")
+    if is_svg_url(url):
+        raise ValueError(f"{context}: SVG images are not allowed")
+    if urlparse(url).scheme not in {'http','https'}:
+        raise ValueError(f"{context}: photo URL must use http(s)")
 
 
 def money(spend):
@@ -38,8 +64,8 @@ def editorial_buttons(urls):
 
 def image_block(rec):
     img = rec["image"]
+    require_photo(img, f"recommendation {rec.get('name','?')}", PHOTO_TYPES)
     caption = f'Photo: <a href="{e(img["source_url"])}" target="_blank" rel="noopener">{e(img["credit"])}</a>.'
-    if img["type"] == "fallback": caption += " Standardized Where I’d Eat fallback because no usable restaurant photo was verified."
     return f'<figure class="photo"><img src="{e(img["url"])}" alt="{e(img["alt"])}" data-image-type="{e(img["type"])}" onerror="this.closest(\'figure\').classList.add(\'image-error\')"><figcaption class="caption">{caption}</figcaption></figure>'
 
 
@@ -64,6 +90,7 @@ def row(rec, rank, kind):
 
 def hero(report):
     h = report["hero"]
+    require_photo(h, "hero", HERO_TYPES)
     return f'''<figure><img src="{e(h['url'])}" alt="{e(h['alt'])}" data-image-type="{e(h['type'])}" onerror="this.style.display='none'"><figcaption class="caption">Photo: <a href="{e(h['source_url'])}" target="_blank" rel="noopener">{e(h['credit'])}</a>.</figcaption></figure>'''
 
 
