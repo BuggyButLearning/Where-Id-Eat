@@ -4,6 +4,9 @@ import json
 import re
 from html.parser import HTMLParser
 from pathlib import Path
+from urllib.parse import urlparse
+
+PHOTO_TYPES={"location_photo","editorial_location_photo","destination_food_photo","official_restaurant","official_food","official_exterior","editorial_restaurant","editorial_food"}
 
 class Parser(HTMLParser):
     def __init__(self):
@@ -22,6 +25,18 @@ class Parser(HTMLParser):
 def segment_for_card(text, card_id):
     m=re.search(rf'<article[^>]+id=["\']{re.escape(card_id)}["\'][\s\S]*?</article>',text,re.I)
     return m.group(0) if m else ''
+
+
+def is_svg_src(src):
+    s=str(src or '').strip().lower()
+    if s.startswith('data:image/svg') or 'image/svg+xml' in s:
+        return True
+    try:
+        p=urlparse(s)
+        if p.path.endswith(('.svg','.svgz')): return True
+        return any(token in p.query for token in ('format=svg','fm=svg','type=svg','image=svg'))
+    except Exception:
+        return False
 
 
 def validate(path):
@@ -63,12 +78,21 @@ def validate(path):
             if scores!=sorted(scores,reverse=True): errors.append(f'{kind} cards are not sorted by displayed final score')
         except Exception: errors.append(f'{kind} card score metadata invalid')
 
+    expected_images=len(primary_cards)+len(companion_cards)+1
+    if len(p.images)!=expected_images:
+        errors.append(f'report must contain exactly one hero photo plus one photo per recommendation ({expected_images} expected, {len(p.images)} found)')
     for i,img in enumerate(p.images,1):
         src=img.get('src','')
+        image_type=img.get('data-image-type','')
         if not img.get('alt','').strip(): errors.append(f'image {i} missing alt text')
         if not src: errors.append(f'image {i} missing src')
         if src.startswith('data:image'): errors.append(f'image {i} uses prohibited embedded/generated data URI')
-    if 'generated placeholder' in text.lower() or 'custom report illustration' in text.lower(): errors.append('report contains generated/illustrated placeholder image language')
+        if is_svg_src(src): errors.append(f'image {i} uses prohibited SVG content instead of photography')
+        if image_type not in PHOTO_TYPES: errors.append(f'image {i} has non-photographic or missing data-image-type: {image_type or "(missing)"}')
+    lower=text.lower()
+    if '<svg' in lower: errors.append('report contains inline SVG; recommendation and hero visuals must be photographs')
+    if 'generated placeholder' in lower or 'custom report illustration' in lower or 'image unavailable' in lower:
+        errors.append('report contains fallback/generated image language')
 
     for c in p.cards:
         cid=c.get('id','?'); seg=segment_for_card(text,cid)
