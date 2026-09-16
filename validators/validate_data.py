@@ -6,11 +6,26 @@ from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = ROOT / "schema" / "report.schema.json"
+PHOTO_TYPES = {"official_restaurant", "official_food", "official_exterior", "editorial_restaurant", "editorial_food"}
 
 
 def is_http(url):
     try:
         return urlparse(url).scheme in {"http", "https"}
+    except Exception:
+        return False
+
+
+def is_svg_image_url(url):
+    u = str(url or "").strip().lower()
+    if u.startswith("data:image/svg") or "image/svg+xml" in u:
+        return True
+    try:
+        parsed = urlparse(u)
+        if parsed.path.endswith((".svg", ".svgz")):
+            return True
+        q = parsed.query
+        return any(token in q for token in ("format=svg", "fm=svg", "type=svg", "image=svg"))
     except Exception:
         return False
 
@@ -43,12 +58,15 @@ def validate_recommendation(rec, kind, errors, warnings):
 
     image = rec.get("image", {})
     image_url = str(image.get("url", ""))
+    image_type = image.get("type")
+    if image_type not in PHOTO_TYPES:
+        errors.append(f"{prefix}: active recommendations require a real restaurant/food photograph; fallback/generated image types are prohibited")
     if image_url.startswith("data:image"):
         errors.append(f"{prefix}: embedded/generated data URI images are prohibited")
-    if image.get("type") == "fallback":
-        warnings.append(f"{prefix}: standardized fallback image used; prefer real restaurant photography")
-    if image.get("type") != "fallback" and not is_http(image_url):
-        errors.append(f"{prefix}: real recommendation images must use a resolvable http(s) URL")
+    if is_svg_image_url(image_url):
+        errors.append(f"{prefix}: SVG images are prohibited; use a real restaurant/food photo")
+    if not is_http(image_url):
+        errors.append(f"{prefix}: recommendation image must use a resolvable http(s) photo URL")
     if not is_http(str(image.get("source_url", ""))):
         errors.append(f"{prefix}: image source_url must be http(s)")
 
@@ -101,9 +119,15 @@ def validate(data):
         errors.append(f"{meal} reports must use {expected_companion} as the companion section")
 
     hero = data.get("report", {}).get("hero", {})
-    if str(hero.get("url", "")).startswith("data:image"): errors.append("hero image cannot be a generated/base64 data URI")
-    if not is_http(str(hero.get("url", ""))): errors.append("hero image must be a location-specific http(s) image")
-    if not is_http(str(hero.get("source_url", ""))): errors.append("hero source_url must be http(s)")
+    hero_url = str(hero.get("url", ""))
+    if hero_url.startswith("data:image"):
+        errors.append("hero image cannot be a generated/base64 data URI")
+    if is_svg_image_url(hero_url):
+        errors.append("hero image cannot be SVG; use a real location or destination food photo")
+    if not is_http(hero_url):
+        errors.append("hero image must be a location-specific http(s) photo")
+    if not is_http(str(hero.get("source_url", ""))):
+        errors.append("hero source_url must be http(s)")
 
     ids=[]
     for kind,recs in (("primary",primary),("companion",companion)):
