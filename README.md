@@ -12,7 +12,7 @@ Version 2 uses a fixed pipeline so ChatGPT and Claude research the food, but do 
 research -> strict JSON -> canonical renderer -> validators -> HTML
 ```
 
-That keeps maps, tables, cards, images, Yelp data, availability checks, coffee or dessert, and section order consistent from report to report.
+That keeps maps, tables, cards, photography, Yelp data, availability checks, coffee or dessert, and section order consistent from report to report.
 
 ## What it does
 
@@ -21,10 +21,13 @@ That keeps maps, tables, cards, images, Yelp data, availability checks, coffee o
 - Minimum 5 meal picks and 4 companion picks
 - Dinner adds Dessert; breakfast and lunch add Coffee
 - Official hours plus a second current availability signal
-- Real restaurant photography with source credit
+- Real restaurant/food/exterior photography with source credit for every recommendation
+- Real location or destination-food photography for the hero
 - Direct Yelp business links and verified ratings when available
 - Official site, menu, directions, reservations, and local editorial sources
 - Anchor-centered interactive map and mobile-friendly HTML
+
+SVG title cards, generated restaurant illustrations, branded fallbacks, and synthetic replacement images are hard failures. If a candidate has no usable verifiable photo, the skill replaces the candidate before rendering.
 
 ## Install
 
@@ -93,7 +96,9 @@ python runtime/bin/where-id-eat build report.json report.html
 
 The source of truth is [`schema/report.schema.json`](schema/report.schema.json). The renderer sorts by one final score and assigns ranks, so the displayed score and rank cannot disagree.
 
-The validators fail reports with missing required sections, too few recommendations, generated/base64 restaurant placeholders, missing links, unresolved anchors, incomplete availability evidence, map/card count mismatches, or invalid Yelp state.
+The validators fail reports with missing required sections, too few recommendations, SVG/generated/fallback images, missing photographs, missing links, unresolved anchors, incomplete availability evidence, map/card count mismatches, or invalid Yelp state. Even the `render` command validates input before rendering.
+
+Do not use old generated HTML as the source for a new report or map experiment. Use schema-valid JSON or research again so legacy placeholders cannot leak into current output.
 
 The default ranking profile is [`profiles/default.json`](profiles/default.json).
 
