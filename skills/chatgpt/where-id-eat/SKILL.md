@@ -1,6 +1,6 @@
 ---
 name: where-id-eat
-description: Run the Where I’d Eat command to research and build a predictable location-centered breakfast, lunch, or dinner guide. Produces validated JSON first, then uses the canonical renderer for fixed HTML structure, real restaurant images, Yelp resolution, current availability checks, an anchor-centered map, and a full coffee or dessert companion section.
+description: Run the Where I’d Eat command to research and build a predictable location-centered breakfast, lunch, or dinner guide. Produces validated JSON first, then uses the canonical renderer for fixed HTML structure, real restaurant photography, Yelp resolution, current availability checks, an anchor-centered map, and a full coffee or dessert companion section.
 ---
 
 # Where I’d Eat
@@ -36,9 +36,11 @@ For every active recommendation:
 - obtain a second independent current signal such as a live business listing, reservation inventory, or same-day notice
 - resolve the direct Yelp business page when possible
 - use a numeric Yelp rating only when directly verified
-- obtain a real restaurant or food photograph, preferring official photography and then reputable editorial photography
-- never generate a restaurant title card, gradient placeholder, base64 SVG, or fake restaurant image
-- if no real image can be verified, explicitly use the standardized repository fallback and accept the validator warning
+- obtain a real restaurant, food, or exterior photograph, preferring official photography and then reputable editorial photography
+- use a real location or destination-food photograph for the hero image
+- never generate or substitute a restaurant title card, SVG, gradient placeholder, branded fallback, illustration, or synthetic restaurant image
+- if a usable real photo cannot be verified for a candidate, replace that candidate with another qualified place before rendering
+- reject image URLs that are SVGs, SVG data URIs, or obvious SVG endpoints
 - include official website, directions, at least one local editorial source, menu when available, and reservation link when relevant
 
 Exclude unresolved closures from the active ranking.
@@ -50,6 +52,8 @@ Write the research to a JSON file that conforms to `schema/report.schema.json` i
 Do not manually assign ranks. Supply one final `score` per recommendation. The renderer sorts by score and assigns ranks so score and rank cannot disagree.
 
 Use `profiles/default.json` or `runtime/profiles/default.json` for the default weighting.
+
+Do not use an older generated HTML report as input to a new report or map test. Reuse only structured JSON that passes the current schema. If no current JSON exists, research again. This prevents legacy placeholders or old layout behavior from leaking into new output.
 
 ## 4. Build with the canonical command
 
@@ -67,7 +71,7 @@ Installed skill package:
 python runtime/bin/where-id-eat build report.json report.html
 ```
 
-The command performs data validation, deterministic rendering, and HTML validation. Fix every error before delivery. Warnings are allowed only when they accurately describe an unavoidable fallback such as an unresolved direct Yelp page or standardized image fallback.
+The command performs data validation, deterministic rendering, and HTML validation. Fix every error before delivery. The validator treats SVGs, generated/fallback images, missing photographs, and incomplete image attribution as hard failures.
 
 ## 5. Deliver
 
