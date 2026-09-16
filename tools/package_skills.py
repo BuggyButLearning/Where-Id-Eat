@@ -6,7 +6,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 DIST=ROOT/'dist'
 RUNTIME_DIRS=['schema','renderer','validators','profiles']
-RUNTIME_FILES=[Path('bin/where-id-eat'),Path('assets/fallback-place.svg')]
+RUNTIME_FILES=[Path('bin/where-id-eat')]
 
 
 def add_tree(zf, src, arcroot):
