@@ -22,7 +22,7 @@ def main():
     sub=ap.add_subparsers(dest="command", required=True)
     v=sub.add_parser("validate", help="validate report JSON")
     v.add_argument("input")
-    r=sub.add_parser("render", help="render JSON to HTML without validation")
+    r=sub.add_parser("render", help="validate report JSON, then render canonical HTML")
     r.add_argument("input"); r.add_argument("output")
     b=sub.add_parser("build", help="validate JSON, render HTML, then validate HTML")
     b.add_argument("input"); b.add_argument("output")
@@ -30,6 +30,7 @@ def main():
     if args.command=="validate":
         run(VALIDATE_DATA,args.input)
     elif args.command=="render":
+        run(VALIDATE_DATA,args.input)
         run(RENDER,args.input,args.output)
     else:
         run(VALIDATE_DATA,args.input)
