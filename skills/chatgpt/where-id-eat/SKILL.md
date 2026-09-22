@@ -1,6 +1,6 @@
 ---
 name: where-id-eat
-description: Run the Where I’d Eat command to research and build a predictable location-centered breakfast, lunch, or dinner guide. Produces validated JSON first, then uses the canonical renderer for fixed HTML structure, real restaurant photography, Yelp resolution, current availability checks, an anchor-centered map, and a full coffee or dessert companion section.
+description: Run the Where I’d Eat command to research and build a predictable location-centered breakfast, lunch, or dinner guide. Produces validated JSON first, then uses the canonical renderer for fixed HTML structure, restaurant photography with a documented SVG fallback only after best-effort image search, Yelp resolution, current availability checks, an anchor-centered map, and a full coffee or dessert companion section.
 ---
 
 # Where I’d Eat
@@ -36,11 +36,12 @@ For every active recommendation:
 - obtain a second independent current signal such as a live business listing, reservation inventory, or same-day notice
 - resolve the direct Yelp business page when possible
 - use a numeric Yelp rating only when directly verified
-- obtain a real restaurant, food, or exterior photograph, preferring official photography and then reputable editorial photography
+- obtain a real restaurant, food, or exterior photograph, preferring official photography and then reputable editorial, reservation, social, or current business-listing photography
 - use a real location or destination-food photograph for the hero image
-- never generate or substitute a restaurant title card, SVG, gradient placeholder, branded fallback, illustration, or synthetic restaurant image
-- if a usable real photo cannot be verified for a candidate, replace that candidate with another qualified place before rendering
-- reject image URLs that are SVGs, SVG data URIs, or obvious SVG endpoints
+- if a recommendation photo is missing, make at least three distinct photo-source checks before using a fallback; include an official source and at least one independent current source among those checks
+- when a usable real photo still cannot be found, generate a simple neutral SVG fallback, set image type to `generated_svg_fallback`, explain the reason, and record the photo-search evidence URLs
+- never use SVG merely for convenience when a verifiable real photograph is available
+- unrelated stock photos, generic gradients, undocumented placeholders, branded fallbacks, and synthetic restaurant scenes are prohibited
 - include official website, directions, at least one local editorial source, menu when available, and reservation link when relevant
 
 Exclude unresolved closures from the active ranking.
@@ -71,10 +72,12 @@ Installed skill package:
 python runtime/bin/where-id-eat build report.json report.html
 ```
 
-The command performs data validation, deterministic rendering, and HTML validation. Fix every error before delivery. The validator treats SVGs, generated/fallback images, missing photographs, and incomplete image attribution as hard failures.
+The command performs data validation, deterministic rendering, and HTML validation. Fix every error before delivery. Undocumented SVG fallbacks, missing image attribution, and fallbacks without the required photo-search evidence are hard failures.
 
 ## 5. Deliver
 
 Return the rendered HTML artifact. Do not substitute a prose-only list when the user requested a guide.
 
 The canonical renderer owns the section order, tables, cards, buttons, map, scoring explanation, and companion section. Do not add, remove, reorder, or redesign report sections in the generated HTML.
+
+Keep report-facing copy focused on the diner and the meal. Do not mention repositories, schemas, validators, renderers, internal tooling, or implementation details in the report narrative.
