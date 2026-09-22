@@ -7,6 +7,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 PHOTO_TYPES={"location_photo","editorial_location_photo","destination_food_photo","official_restaurant","official_food","official_exterior","editorial_restaurant","editorial_food"}
+FALLBACK_TYPE="generated_svg_fallback"
 
 class Parser(HTMLParser):
     def __init__(self):
@@ -86,13 +87,21 @@ def validate(path):
         image_type=img.get('data-image-type','')
         if not img.get('alt','').strip(): errors.append(f'image {i} missing alt text')
         if not src: errors.append(f'image {i} missing src')
-        if src.startswith('data:image'): errors.append(f'image {i} uses prohibited embedded/generated data URI')
-        if is_svg_src(src): errors.append(f'image {i} uses prohibited SVG content instead of photography')
-        if image_type not in PHOTO_TYPES: errors.append(f'image {i} has non-photographic or missing data-image-type: {image_type or "(missing)"}')
+        if image_type == FALLBACK_TYPE:
+            if not is_svg_src(src): errors.append(f'image {i} fallback is not SVG content')
+            try:
+                if int(img.get('data-photo-search-count','0')) < 3:
+                    errors.append(f'image {i} SVG fallback has fewer than three documented photo-source checks')
+            except ValueError:
+                errors.append(f'image {i} SVG fallback has invalid photo search count')
+        else:
+            if src.startswith('data:image'): errors.append(f'image {i} photograph uses prohibited embedded data URI')
+            if is_svg_src(src): errors.append(f'image {i} uses SVG without documented fallback state')
+            if image_type not in PHOTO_TYPES: errors.append(f'image {i} has invalid or missing data-image-type: {image_type or "(missing)"}')
     lower=text.lower()
-    if '<svg' in lower: errors.append('report contains inline SVG; recommendation and hero visuals must be photographs')
+    if '<svg' in lower: errors.append('report contains inline SVG markup; SVG fallbacks must use an image src')
     if 'generated placeholder' in lower or 'custom report illustration' in lower or 'image unavailable' in lower:
-        errors.append('report contains fallback/generated image language')
+        errors.append('report contains an undocumented generic fallback')
 
     for c in p.cards:
         cid=c.get('id','?'); seg=segment_for_card(text,cid)
