@@ -7,6 +7,7 @@ from urllib.parse import urlparse
 
 TEMPLATE = Path(__file__).resolve().parent / "template.html"
 PHOTO_TYPES={"official_restaurant","official_food","official_exterior","editorial_restaurant","editorial_food"}
+FALLBACK_TYPE="generated_svg_fallback"
 HERO_TYPES={"location_photo","editorial_location_photo","destination_food_photo"}
 
 
@@ -64,9 +65,20 @@ def editorial_buttons(urls):
 
 def image_block(rec):
     img = rec["image"]
-    require_photo(img, f"recommendation {rec.get('name','?')}", PHOTO_TYPES)
-    caption = f'Photo: <a href="{e(img["source_url"])}" target="_blank" rel="noopener">{e(img["credit"])}</a>.'
-    return f'<figure class="photo"><img src="{e(img["url"])}" alt="{e(img["alt"])}" data-image-type="{e(img["type"])}" onerror="this.closest(\'figure\').classList.add(\'image-error\')"><figcaption class="caption">{caption}</figcaption></figure>'
+    if img.get("type") == FALLBACK_TYPE:
+        url = str(img.get("url", ""))
+        checks = len(img.get("photo_search_evidence") or [])
+        if not is_svg_url(url):
+            raise ValueError(f"recommendation {rec.get('name','?')}: generated fallback must be SVG")
+        if not (url.startswith("data:image/svg") or urlparse(url).scheme in {"http", "https"}):
+            raise ValueError(f"recommendation {rec.get('name','?')}: SVG fallback must use data URI or http(s)")
+        caption = f'Generated SVG fallback after {checks} photo-source checks. {e(img.get("fallback_reason","No usable photograph was found."))}'
+        search_attr = f' data-photo-search-count="{checks}"'
+    else:
+        require_photo(img, f"recommendation {rec.get('name','?')}", PHOTO_TYPES)
+        caption = f'Photo: <a href="{e(img["source_url"])}" target="_blank" rel="noopener">{e(img["credit"])}</a>.'
+        search_attr = ''
+    return f'<figure class="photo"><img src="{e(img["url"])}" alt="{e(img["alt"])}" data-image-type="{e(img["type"])}"{search_attr} onerror="this.closest(\'figure\').classList.add(\'image-error\')"><figcaption class="caption">{caption}</figcaption></figure>'
 
 
 def card(rec, rank, kind):
