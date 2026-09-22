@@ -21,13 +21,13 @@ That keeps maps, tables, cards, photography, Yelp data, availability checks, cof
 - Minimum 5 meal picks and 4 companion picks
 - Dinner adds Dessert; breakfast and lunch add Coffee
 - Official hours plus a second current availability signal
-- Real restaurant/food/exterior photography with source credit for every recommendation
+- Real restaurant/food/exterior photography with source credit whenever a usable photo can be verified
 - Real location or destination-food photography for the hero
 - Direct Yelp business links and verified ratings when available
 - Official site, menu, directions, reservations, and local editorial sources
 - Anchor-centered interactive map and mobile-friendly HTML
 
-SVG title cards, generated restaurant illustrations, branded fallbacks, and synthetic replacement images are hard failures. If a candidate has no usable verifiable photo, the skill replaces the candidate before rendering.
+Real photography remains the default. If a usable photo cannot be found after at least three documented source checks, including an official source and an independent current source, the report may use a simple generated SVG fallback for that recommendation. The fallback is allowed only when the research evidence is recorded in the JSON contract.
 
 ## Install
 
@@ -96,7 +96,7 @@ python runtime/bin/where-id-eat build report.json report.html
 
 The source of truth is [`schema/report.schema.json`](schema/report.schema.json). The renderer sorts by one final score and assigns ranks, so the displayed score and rank cannot disagree.
 
-The validators fail reports with missing required sections, too few recommendations, SVG/generated/fallback images, missing photographs, missing links, unresolved anchors, incomplete availability evidence, map/card count mismatches, or invalid Yelp state. Even the `render` command validates input before rendering.
+The validators fail reports with missing required sections, too few recommendations, undocumented image fallbacks, missing links, unresolved anchors, incomplete availability evidence, map/card count mismatches, or invalid Yelp state. Even the `render` command validates input before rendering.
 
 Do not use old generated HTML as the source for a new report or map experiment. Use schema-valid JSON or research again so legacy placeholders cannot leak into current output.
 
