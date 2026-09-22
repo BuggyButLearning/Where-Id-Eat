@@ -7,6 +7,7 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = ROOT / "schema" / "report.schema.json"
 PHOTO_TYPES = {"official_restaurant", "official_food", "official_exterior", "editorial_restaurant", "editorial_food"}
+FALLBACK_TYPE = "generated_svg_fallback"
 
 
 def is_http(url):
@@ -59,14 +60,30 @@ def validate_recommendation(rec, kind, errors, warnings):
     image = rec.get("image", {})
     image_url = str(image.get("url", ""))
     image_type = image.get("type")
-    if image_type not in PHOTO_TYPES:
-        errors.append(f"{prefix}: active recommendations require a real restaurant/food photograph; fallback/generated image types are prohibited")
-    if image_url.startswith("data:image"):
-        errors.append(f"{prefix}: embedded/generated data URI images are prohibited")
-    if is_svg_image_url(image_url):
-        errors.append(f"{prefix}: SVG images are prohibited; use a real restaurant/food photo")
-    if not is_http(image_url):
-        errors.append(f"{prefix}: recommendation image must use a resolvable http(s) photo URL")
+    if image_type == FALLBACK_TYPE:
+        evidence = image.get("photo_search_evidence") or []
+        if len(evidence) < 3:
+            errors.append(f"{prefix}: SVG fallback requires at least three documented photo-source checks")
+        for u in evidence:
+            if not is_http(str(u)):
+                errors.append(f"{prefix}: invalid photo_search_evidence URL {u}")
+        if not str(image.get("fallback_reason") or "").strip():
+            errors.append(f"{prefix}: SVG fallback requires fallback_reason")
+        if not is_svg_image_url(image_url):
+            errors.append(f"{prefix}: generated_svg_fallback must use SVG content")
+        if image_url.startswith("data:image") and not image_url.lower().startswith("data:image/svg"):
+            errors.append(f"{prefix}: fallback data URI must be SVG")
+        elif not image_url.startswith("data:image") and not is_http(image_url):
+            errors.append(f"{prefix}: fallback SVG must use data:image/svg or http(s)")
+    else:
+        if image_type not in PHOTO_TYPES:
+            errors.append(f"{prefix}: image type must be a verified photograph or documented SVG fallback")
+        if image_url.startswith("data:image"):
+            errors.append(f"{prefix}: photographic images cannot use embedded data URIs")
+        if is_svg_image_url(image_url):
+            errors.append(f"{prefix}: SVG is allowed only for documented generated_svg_fallback images")
+        if not is_http(image_url):
+            errors.append(f"{prefix}: recommendation photo must use a resolvable http(s) URL")
     if not is_http(str(image.get("source_url", ""))):
         errors.append(f"{prefix}: image source_url must be http(s)")
 
