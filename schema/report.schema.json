@@ -4,50 +4,167 @@
   "title": "Where I'd Eat report data",
   "type": "object",
   "additionalProperties": false,
-  "required": ["version", "command", "anchor", "report", "primary", "companion", "sources"],
+  "required": [
+    "version",
+    "command",
+    "anchor",
+    "report",
+    "primary",
+    "companion",
+    "sources"
+  ],
   "properties": {
-    "version": {"const": "2.0"},
+    "version": {
+      "const": "2.0"
+    },
     "command": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["meal", "date", "profile", "preference_mode", "primary_count", "companion_count"],
+      "required": [
+        "meal",
+        "date",
+        "profile",
+        "preference_mode",
+        "primary_count",
+        "companion_count"
+      ],
       "properties": {
-        "meal": {"enum": ["breakfast", "lunch", "dinner"]},
-        "date": {"type": "string", "format": "date"},
-        "profile": {"type": "string", "minLength": 1},
-        "preference_mode": {"enum": ["default", "interview"]},
-        "primary_count": {"type": "integer", "minimum": 5, "maximum": 12},
-        "companion_count": {"type": "integer", "minimum": 4, "maximum": 10},
-        "party_size": {"type": ["integer", "null"], "minimum": 1},
-        "budget": {"type": ["string", "null"]},
-        "max_travel_minutes": {"type": ["integer", "null"], "minimum": 1}
+        "meal": {
+          "enum": [
+            "breakfast",
+            "lunch",
+            "dinner"
+          ]
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "profile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "preference_mode": {
+          "enum": [
+            "default",
+            "interview"
+          ]
+        },
+        "primary_count": {
+          "type": "integer",
+          "minimum": 5,
+          "maximum": 12
+        },
+        "companion_count": {
+          "type": "integer",
+          "minimum": 4,
+          "maximum": 10
+        },
+        "party_size": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "budget": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "max_travel_minutes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        }
       }
     },
     "anchor": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "address", "city", "lat", "lng", "map_url"],
+      "required": [
+        "name",
+        "address",
+        "city",
+        "lat",
+        "lng",
+        "map_url"
+      ],
       "properties": {
-        "name": {"type": "string", "minLength": 2},
-        "address": {"type": "string", "minLength": 4},
-        "city": {"type": "string", "minLength": 2},
-        "lat": {"type": "number", "minimum": -90, "maximum": 90},
-        "lng": {"type": "number", "minimum": -180, "maximum": 180},
-        "map_url": {"type": "string", "minLength": 8}
+        "name": {
+          "type": "string",
+          "minLength": 2
+        },
+        "address": {
+          "type": "string",
+          "minLength": 4
+        },
+        "city": {
+          "type": "string",
+          "minLength": 2
+        },
+        "lat": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "lng": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        "map_url": {
+          "type": "string",
+          "minLength": 8
+        }
       }
     },
     "report": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["title", "subtitle", "generated_at", "companion_label", "hero", "top_pick_summary", "verification_summary", "quick_picks"],
+      "required": [
+        "title",
+        "subtitle",
+        "generated_at",
+        "companion_label",
+        "hero",
+        "top_pick_summary",
+        "verification_summary",
+        "quick_picks"
+      ],
       "properties": {
-        "title": {"type": "string", "minLength": 4},
-        "subtitle": {"type": "string", "minLength": 4},
-        "generated_at": {"type": "string", "minLength": 8},
-        "companion_label": {"enum": ["Coffee", "Dessert"]},
-        "hero": {"$ref": "#/$defs/heroImage"},
-        "top_pick_summary": {"type": "string", "minLength": 12},
-        "verification_summary": {"type": "string", "minLength": 12},
+        "title": {
+          "type": "string",
+          "minLength": 4
+        },
+        "subtitle": {
+          "type": "string",
+          "minLength": 4
+        },
+        "generated_at": {
+          "type": "string",
+          "minLength": 8
+        },
+        "companion_label": {
+          "enum": [
+            "Coffee",
+            "Dessert"
+          ]
+        },
+        "hero": {
+          "$ref": "#/$defs/heroImage"
+        },
+        "top_pick_summary": {
+          "type": "string",
+          "minLength": 12
+        },
+        "verification_summary": {
+          "type": "string",
+          "minLength": 12
+        },
         "quick_picks": {
           "type": "array",
           "minItems": 3,
@@ -55,11 +172,24 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["label", "recommendation_id", "note"],
+            "required": [
+              "label",
+              "recommendation_id",
+              "note"
+            ],
             "properties": {
-              "label": {"type": "string", "minLength": 3},
-              "recommendation_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
-              "note": {"type": "string", "minLength": 4}
+              "label": {
+                "type": "string",
+                "minLength": 3
+              },
+              "recommendation_id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9-]*$"
+              },
+              "note": {
+                "type": "string",
+                "minLength": 4
+              }
             }
           }
         }
@@ -69,13 +199,17 @@
       "type": "array",
       "minItems": 5,
       "maxItems": 12,
-      "items": {"$ref": "#/$defs/recommendation"}
+      "items": {
+        "$ref": "#/$defs/recommendation"
+      }
     },
     "companion": {
       "type": "array",
       "minItems": 4,
       "maxItems": 10,
-      "items": {"$ref": "#/$defs/recommendation"}
+      "items": {
+        "$ref": "#/$defs/recommendation"
+      }
     },
     "sources": {
       "type": "array",
@@ -83,10 +217,19 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["label", "url"],
+        "required": [
+          "label",
+          "url"
+        ],
         "properties": {
-          "label": {"type": "string", "minLength": 2},
-          "url": {"type": "string", "minLength": 8}
+          "label": {
+            "type": "string",
+            "minLength": 2
+          },
+          "url": {
+            "type": "string",
+            "minLength": 8
+          }
         }
       }
     }
@@ -95,69 +238,193 @@
     "heroImage": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["url", "alt", "credit", "source_url", "type"],
+      "required": [
+        "url",
+        "alt",
+        "credit",
+        "source_url",
+        "type"
+      ],
       "properties": {
-        "url": {"type": "string", "minLength": 4},
-        "alt": {"type": "string", "minLength": 8},
-        "credit": {"type": "string", "minLength": 2},
-        "source_url": {"type": "string", "minLength": 8},
-        "type": {"enum": ["location_photo", "editorial_location_photo", "destination_food_photo"]}
+        "url": {
+          "type": "string",
+          "minLength": 4
+        },
+        "alt": {
+          "type": "string",
+          "minLength": 8
+        },
+        "credit": {
+          "type": "string",
+          "minLength": 2
+        },
+        "source_url": {
+          "type": "string",
+          "minLength": 8
+        },
+        "type": {
+          "enum": [
+            "location_photo",
+            "editorial_location_photo",
+            "destination_food_photo"
+          ]
+        }
       }
     },
     "recommendation": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "id", "name", "score", "category", "address", "lat", "lng", "spend", "distance",
-        "hours", "availability", "image", "yelp", "links", "why", "order", "strategy", "current_signal"
+        "id",
+        "name",
+        "score",
+        "category",
+        "address",
+        "lat",
+        "lng",
+        "spend",
+        "distance",
+        "hours",
+        "availability",
+        "image",
+        "yelp",
+        "links",
+        "why",
+        "order",
+        "strategy",
+        "current_signal"
       ],
       "properties": {
-        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
-        "name": {"type": "string", "minLength": 2},
-        "score": {"type": "number", "minimum": 0, "maximum": 10},
-        "category": {"type": "string", "minLength": 3},
-        "address": {"type": "string", "minLength": 4},
-        "lat": {"type": "number", "minimum": -90, "maximum": 90},
-        "lng": {"type": "number", "minimum": -180, "maximum": 180},
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 2
+        },
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "category": {
+          "type": "string",
+          "minLength": 3
+        },
+        "address": {
+          "type": "string",
+          "minLength": 4
+        },
+        "lat": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "lng": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
         "spend": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["min", "max", "currency"],
+          "required": [
+            "min",
+            "max",
+            "currency"
+          ],
           "properties": {
-            "min": {"type": "number", "minimum": 0},
-            "max": {"type": "number", "minimum": 0},
-            "currency": {"type": "string", "minLength": 1, "maxLength": 4}
+            "min": {
+              "type": "number",
+              "minimum": 0
+            },
+            "max": {
+              "type": "number",
+              "minimum": 0
+            },
+            "currency": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4
+            }
           }
         },
         "distance": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["summary", "miles", "drive_minutes", "walk_minutes"],
+          "required": [
+            "summary",
+            "miles",
+            "drive_minutes",
+            "walk_minutes"
+          ],
           "properties": {
-            "summary": {"type": "string", "minLength": 4},
-            "miles": {"type": ["number", "null"], "minimum": 0},
-            "drive_minutes": {"$ref": "#/$defs/minuteRange"},
-            "walk_minutes": {"$ref": "#/$defs/minuteRange"}
+            "summary": {
+              "type": "string",
+              "minLength": 4
+            },
+            "miles": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "drive_minutes": {
+              "$ref": "#/$defs/minuteRange"
+            },
+            "walk_minutes": {
+              "$ref": "#/$defs/minuteRange"
+            }
           }
         },
         "hours": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["label", "verified", "verification_sources"],
+          "required": [
+            "label",
+            "verified",
+            "verification_sources"
+          ],
           "properties": {
-            "label": {"type": "string", "minLength": 4},
-            "verified": {"type": "boolean"},
+            "label": {
+              "type": "string",
+              "minLength": 4
+            },
+            "verified": {
+              "type": "boolean"
+            },
             "verification_sources": {
               "type": "array",
               "minItems": 2,
               "items": {
                 "type": "object",
                 "additionalProperties": false,
-                "required": ["type", "label", "url"],
+                "required": [
+                  "type",
+                  "label",
+                  "url"
+                ],
                 "properties": {
-                  "type": {"enum": ["official", "business_listing", "reservation", "social", "editorial", "other_live"]},
-                  "label": {"type": "string", "minLength": 2},
-                  "url": {"type": "string", "minLength": 8}
+                  "type": {
+                    "enum": [
+                      "official",
+                      "business_listing",
+                      "reservation",
+                      "social",
+                      "editorial",
+                      "other_live"
+                    ]
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 2
+                  },
+                  "url": {
+                    "type": "string",
+                    "minLength": 8
+                  }
                 }
               }
             }
@@ -166,66 +433,220 @@
         "availability": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["status", "note"],
+          "required": [
+            "status",
+            "note"
+          ],
           "properties": {
-            "status": {"enum": ["verified_open", "verified_limited", "verified_walk_in", "verified_reservation"]},
-            "note": {"type": "string", "minLength": 8}
+            "status": {
+              "enum": [
+                "verified_open",
+                "verified_limited",
+                "verified_walk_in",
+                "verified_reservation"
+              ]
+            },
+            "note": {
+              "type": "string",
+              "minLength": 8
+            }
           }
         },
         "image": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["url", "source_url", "credit", "type", "alt"],
+          "required": [
+            "url",
+            "source_url",
+            "credit",
+            "type",
+            "alt"
+          ],
           "properties": {
-            "url": {"type": "string", "minLength": 4},
-            "source_url": {"type": "string", "minLength": 8},
-            "credit": {"type": "string", "minLength": 2},
-            "alt": {"type": "string", "minLength": 8},
-            "type": {"enum": ["official_restaurant", "official_food", "official_exterior", "editorial_restaurant", "editorial_food"]}
-          }
+            "url": {
+              "type": "string",
+              "minLength": 4
+            },
+            "source_url": {
+              "type": "string",
+              "minLength": 8
+            },
+            "credit": {
+              "type": "string",
+              "minLength": 2
+            },
+            "alt": {
+              "type": "string",
+              "minLength": 8
+            },
+            "type": {
+              "enum": [
+                "official_restaurant",
+                "official_food",
+                "official_exterior",
+                "editorial_restaurant",
+                "editorial_food",
+                "generated_svg_fallback"
+              ]
+            },
+            "fallback_reason": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 12
+            },
+            "photo_search_evidence": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "minItems": 3,
+              "items": {
+                "type": "string",
+                "minLength": 8
+              }
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "const": "generated_svg_fallback"
+                  }
+                },
+                "required": [
+                  "type"
+                ]
+              },
+              "then": {
+                "required": [
+                  "fallback_reason",
+                  "photo_search_evidence"
+                ]
+              }
+            }
+          ]
         },
         "yelp": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["url", "verified", "resolution", "rating", "review_count"],
+          "required": [
+            "url",
+            "verified",
+            "resolution",
+            "rating",
+            "review_count"
+          ],
           "properties": {
-            "url": {"type": "string", "minLength": 8},
-            "verified": {"type": "boolean"},
-            "resolution": {"enum": ["direct", "search_fallback", "unavailable"]},
-            "rating": {"type": ["number", "null"], "minimum": 0, "maximum": 5},
-            "review_count": {"type": ["integer", "null"], "minimum": 0}
+            "url": {
+              "type": "string",
+              "minLength": 8
+            },
+            "verified": {
+              "type": "boolean"
+            },
+            "resolution": {
+              "enum": [
+                "direct",
+                "search_fallback",
+                "unavailable"
+              ]
+            },
+            "rating": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0,
+              "maximum": 5
+            },
+            "review_count": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            }
           }
         },
         "links": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["website", "menu", "directions", "reservation", "editorial"],
+          "required": [
+            "website",
+            "menu",
+            "directions",
+            "reservation",
+            "editorial"
+          ],
           "properties": {
-            "website": {"type": "string", "minLength": 8},
-            "menu": {"type": ["string", "null"]},
-            "directions": {"type": "string", "minLength": 8},
-            "reservation": {"type": ["string", "null"]},
+            "website": {
+              "type": "string",
+              "minLength": 8
+            },
+            "menu": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "directions": {
+              "type": "string",
+              "minLength": 8
+            },
+            "reservation": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
             "editorial": {
               "type": "array",
               "minItems": 1,
-              "items": {"type": "string", "minLength": 8}
+              "items": {
+                "type": "string",
+                "minLength": 8
+              }
             }
           }
         },
-        "why": {"type": "string", "minLength": 20},
-        "order": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 2}},
-        "strategy": {"type": "string", "minLength": 12},
-        "current_signal": {"type": "string", "minLength": 12}
+        "why": {
+          "type": "string",
+          "minLength": 20
+        },
+        "order": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string",
+            "minLength": 2
+          }
+        },
+        "strategy": {
+          "type": "string",
+          "minLength": 12
+        },
+        "current_signal": {
+          "type": "string",
+          "minLength": 12
+        }
       }
     },
     "minuteRange": {
       "oneOf": [
-        {"type": "null"},
+        {
+          "type": "null"
+        },
         {
           "type": "array",
           "minItems": 2,
           "maxItems": 2,
-          "items": {"type": "integer", "minimum": 0}
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
         }
       ]
     }
