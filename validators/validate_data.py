@@ -67,6 +67,8 @@ def validate_recommendation(rec, kind, errors, warnings):
         for u in evidence:
             if not is_http(str(u)):
                 errors.append(f"{prefix}: invalid photo_search_evidence URL {u}")
+        if not any("yelp.com" in str(u).lower() or "yelpcdn.com" in str(u).lower() for u in evidence):
+            errors.append(f"{prefix}: SVG fallback requires a documented Yelp photo-source check")
         if not str(image.get("fallback_reason") or "").strip():
             errors.append(f"{prefix}: SVG fallback requires fallback_reason")
         if not is_svg_image_url(image_url):
