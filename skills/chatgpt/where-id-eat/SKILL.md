@@ -38,7 +38,8 @@ For every active recommendation:
 - use a numeric Yelp rating only when directly verified
 - obtain a real restaurant, food, or exterior photograph, preferring official photography and then reputable editorial, reservation, social, or current business-listing photography
 - use a real location or destination-food photograph for the hero image
-- if a recommendation photo is missing, make at least three distinct photo-source checks before using a fallback; include an official source and at least one independent current source among those checks
+- if a recommendation photo is missing, make at least three distinct photo-source checks before using a fallback; the search ladder must include the official restaurant site, the direct Yelp business page or Yelp photo search, and at least one other independent current source
+- treat Yelp as a required image source check, not only a ratings source. If direct Yelp access is blocked, document the attempted Yelp business/photo URL and continue to other image sources
 - when a usable real photo still cannot be found, generate a simple neutral SVG fallback, set image type to `generated_svg_fallback`, explain the reason, and record the photo-search evidence URLs
 - never use SVG merely for convenience when a verifiable real photograph is available
 - unrelated stock photos, generic gradients, undocumented placeholders, branded fallbacks, and synthetic restaurant scenes are prohibited
