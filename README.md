@@ -27,7 +27,7 @@ That keeps maps, tables, cards, photography, Yelp data, availability checks, cof
 - Official site, menu, directions, reservations, and local editorial sources
 - Anchor-centered interactive map and mobile-friendly HTML
 
-Real photography remains the default. If a usable photo cannot be found after at least three documented source checks, including an official source and an independent current source, the report may use a simple generated SVG fallback for that recommendation. The fallback is allowed only when the research evidence is recorded in the JSON contract.
+Real photography remains the default. The image search ladder now explicitly requires the official restaurant site, Yelp, and at least one other independent current source before fallback. If Yelp blocks automated access, the attempted Yelp business or photo URL is still recorded as part of the search evidence. If a usable photo cannot be found after those checks, the report may use a simple generated SVG fallback for that recommendation. The fallback is allowed only when the research evidence is recorded in the JSON contract.
 
 ## Install
 
