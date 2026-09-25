@@ -49,6 +49,8 @@ python runtime/bin/where-id-eat build report.json report.html
 
 Fix all validator errors. Undocumented SVG fallbacks, fallbacks with fewer than three photo-source checks, and missing image attribution are hard failures. The renderer owns report structure, section order, map behavior, tables, cards, buttons, and scoring presentation. Do not manually modify the generated HTML except to fix the canonical renderer itself.
 
+The generated report map must remain usable when the HTML is downloaded and opened from a local file. Use the canonical MapLibre + PMTiles map path, never direct Leaflet/OpenStreetMap tile requests, and always include the embedded offline proximity-map fallback. If live map resources are blocked by a browser, firewall, privacy extension, or local-file policy, the fallback must remain visible rather than showing a broken or access-blocked map.
+
 Keep report-facing copy focused on the diner and meal. Do not mention repositories, schemas, validators, renderers, internal tooling, or implementation details in the report narrative.
 
 Deliver the validated HTML artifact.
