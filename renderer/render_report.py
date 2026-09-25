@@ -2,6 +2,7 @@
 import argparse
 import html
 import json
+import math
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -114,6 +115,61 @@ def quick_picks(items, rec_by_id):
     return "".join(out)
 
 
+
+def offline_map(data, primary, companion):
+    width, height, margin = 1000, 540, 62
+    anchor = data["anchor"]
+    mid_lat = math.radians(float(anchor["lat"]))
+    cos_lat = max(math.cos(mid_lat), 0.2)
+
+    def project(lat, lng):
+        return ((float(lng) - float(anchor["lng"])) * cos_lat, float(lat) - float(anchor["lat"]))
+
+    pts = [("A", anchor["name"], None, anchor["lat"], anchor["lng"], "anchor")]
+    pts += [(str(i), r["name"], r["id"], r["lat"], r["lng"], "primary") for i, r in enumerate(primary, 1)]
+    pts += [(f"C{i}", r["name"], r["id"], r["lat"], r["lng"], "companion") for i, r in enumerate(companion, 1)]
+
+    projected = [(label, name, rid, *project(lat, lng), kind) for label, name, rid, lat, lng, kind in pts]
+    xs = [p[3] for p in projected]
+    ys = [p[4] for p in projected]
+    min_x, max_x = min(xs), max(xs)
+    min_y, max_y = min(ys), max(ys)
+    span_x = max(max_x - min_x, 0.006)
+    span_y = max(max_y - min_y, 0.006)
+    scale = min((width - 2 * margin) / span_x, (height - 2 * margin) / span_y)
+    cx = (min_x + max_x) / 2
+    cy = (min_y + max_y) / 2
+
+    def xy(x, y):
+        return (width / 2 + (x - cx) * scale, height / 2 - (y - cy) * scale)
+
+    grid = []
+    for x in range(100, width, 100):
+        grid.append(f'<line x1="{x}" y1="0" x2="{x}" y2="{height}" class="offline-grid"/>')
+    for y in range(90, height, 90):
+        grid.append(f'<line x1="0" y1="{y}" x2="{width}" y2="{y}" class="offline-grid"/>')
+
+    markers = []
+    for label, name, rid, x, y, kind in projected:
+        px, py = xy(x, y)
+        cls = "offline-marker anchor" if kind == "anchor" else ("offline-marker companion" if kind == "companion" else "offline-marker")
+        body = (
+            f'<g class="{cls}" transform="translate({px:.1f},{py:.1f})">'
+            f'<circle r="18"></circle><text text-anchor="middle" dy=".35em">{e(label)}</text>'
+            f'<title>{e(name)}</title></g>'
+        )
+        markers.append(f'<a href="#{e(rid)}">{body}</a>' if rid else body)
+
+    return (
+        f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="Offline proximity map showing relative positions from {e(anchor["name"])}">'
+        f'<rect width="{width}" height="{height}" class="offline-bg"/>'
+        + "".join(grid)
+        + f'<text x="28" y="38" class="offline-title">Offline proximity map</text>'
+        + f'<text x="28" y="66" class="offline-note">Relative positions remain available when the live basemap is blocked. Use Google Maps buttons for street-level routing.</text>'
+        + "".join(markers)
+        + '</svg>'
+    )
+
 def render(data):
     primary=sorted(data["primary"],key=lambda x:(-x["score"],x["name"].lower()))
     companion=sorted(data["companion"],key=lambda x:(-x["score"],x["name"].lower()))
@@ -122,7 +178,7 @@ def render(data):
     expected="Dessert" if meal=="dinner" else "Coffee"
     if data["report"]["companion_label"]!=expected: raise ValueError(f"companion_label must be {expected} for {meal}")
     map_data={"anchor":{"name":data["anchor"]["name"],"lat":data["anchor"]["lat"],"lng":data["anchor"]["lng"]},"primary":[{"rank":i,"id":r["id"],"name":r["name"],"score":r["score"],"lat":r["lat"],"lng":r["lng"]} for i,r in enumerate(primary,1)],"companion":[{"rank":i,"id":r["id"],"name":r["name"],"score":r["score"],"lat":r["lat"],"lng":r["lng"]} for i,r in enumerate(companion,1)]}
-    replacements={"@@TITLE@@":e(data["report"]["title"]),"@@SUBTITLE@@":e(data["report"]["subtitle"]),"@@HERO@@":hero(data["report"]),"@@TOP_PICK@@":e(data["report"]["top_pick_summary"]),"@@VERIFICATION@@":e(data["report"]["verification_summary"]),"@@QUICK_PICKS@@":quick_picks(data["report"]["quick_picks"],rec_by_id),"@@ANCHOR_NAME@@":e(data["anchor"]["name"]),"@@ANCHOR_MAP_URL@@":e(data["anchor"]["map_url"]),"@@COMPANION_LABEL@@":e(data["report"]["companion_label"]),"@@PRIMARY_ROWS@@":"".join(row(r,i,"primary") for i,r in enumerate(primary,1)),"@@COMPANION_ROWS@@":"".join(row(r,i,"companion") for i,r in enumerate(companion,1)),"@@PRIMARY_CARDS@@":"".join(card(r,i,"primary") for i,r in enumerate(primary,1)),"@@COMPANION_CARDS@@":"".join(card(r,i,"companion") for i,r in enumerate(companion,1)),"@@SOURCES@@":"".join(f'<li><a href="{e(s["url"])}" target="_blank" rel="noopener">{e(s["label"])}</a></li>' for s in data["sources"]),"@@GENERATED_AT@@":e(data["report"]["generated_at"]),"@@MAP_DATA@@":json.dumps(map_data,ensure_ascii=False).replace("<","\\u003c"),"@@PRIMARY_COUNT@@":str(len(primary)),"@@COMPANION_COUNT@@":str(len(companion))}
+    replacements={"@@TITLE@@":e(data["report"]["title"]),"@@SUBTITLE@@":e(data["report"]["subtitle"]),"@@HERO@@":hero(data["report"]),"@@TOP_PICK@@":e(data["report"]["top_pick_summary"]),"@@VERIFICATION@@":e(data["report"]["verification_summary"]),"@@QUICK_PICKS@@":quick_picks(data["report"]["quick_picks"],rec_by_id),"@@ANCHOR_NAME@@":e(data["anchor"]["name"]),"@@ANCHOR_MAP_URL@@":e(data["anchor"]["map_url"]),"@@COMPANION_LABEL@@":e(data["report"]["companion_label"]),"@@PRIMARY_ROWS@@":"".join(row(r,i,"primary") for i,r in enumerate(primary,1)),"@@COMPANION_ROWS@@":"".join(row(r,i,"companion") for i,r in enumerate(companion,1)),"@@PRIMARY_CARDS@@":"".join(card(r,i,"primary") for i,r in enumerate(primary,1)),"@@COMPANION_CARDS@@":"".join(card(r,i,"companion") for i,r in enumerate(companion,1)),"@@SOURCES@@":"".join(f'<li><a href="{e(s["url"])}" target="_blank" rel="noopener">{e(s["label"])}</a></li>' for s in data["sources"]),"@@GENERATED_AT@@":e(data["report"]["generated_at"]),"@@MAP_DATA@@":json.dumps(map_data,ensure_ascii=False).replace("<","\\u003c"),"@@OFFLINE_MAP@@":offline_map(data,primary,companion),"@@PRIMARY_COUNT@@":str(len(primary)),"@@COMPANION_COUNT@@":str(len(companion))}
     out=TEMPLATE.read_text(encoding="utf-8")
     for key,value in replacements.items(): out=out.replace(key,value)
     if "@@" in out: raise ValueError("unresolved template token remains")
