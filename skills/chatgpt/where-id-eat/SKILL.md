@@ -81,4 +81,6 @@ Return the rendered HTML artifact. Do not substitute a prose-only list when the 
 
 The canonical renderer owns the section order, tables, cards, buttons, map, scoring explanation, and companion section. Do not add, remove, reorder, or redesign report sections in the generated HTML.
 
+The generated report map must remain usable when the HTML is downloaded and opened from a local file. Use the canonical MapLibre + PMTiles map path, never direct Leaflet/OpenStreetMap tile requests, and always include the embedded offline proximity-map fallback. If live map resources are blocked by a browser, firewall, privacy extension, or local-file policy, the fallback must remain visible rather than showing a broken or access-blocked map.
+
 Keep report-facing copy focused on the diner and the meal. Do not mention repositories, schemas, validators, renderers, internal tooling, or implementation details in the report narrative.
