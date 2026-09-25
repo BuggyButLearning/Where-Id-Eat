@@ -99,7 +99,18 @@ def validate(path):
             if is_svg_src(src): errors.append(f'image {i} uses SVG without documented fallback state')
             if image_type not in PHOTO_TYPES: errors.append(f'image {i} has invalid or missing data-image-type: {image_type or "(missing)"}')
     lower=text.lower()
-    if '<svg' in lower: errors.append('report contains inline SVG markup; SVG fallbacks must use an image src')
+    fallback_start=lower.find('id="guide-map-fallback"')
+    if fallback_start < 0:
+        errors.append('missing embedded offline map fallback')
+    else:
+        fallback_open=lower.rfind('<div',0,fallback_start)
+        fallback_end=lower.find('</div>',fallback_start)
+        fallback_segment=lower[fallback_open:fallback_end+6] if fallback_open>=0 and fallback_end>=0 else ''
+        if '<svg' not in fallback_segment:
+            errors.append('offline map fallback must contain an embedded SVG proximity map')
+        outside_svg=lower[:fallback_open] + lower[fallback_end+6:] if fallback_open>=0 and fallback_end>=0 else lower
+        if '<svg' in outside_svg:
+            errors.append('inline SVG is allowed only inside the offline map fallback')
     if 'generated placeholder' in lower or 'custom report illustration' in lower or 'image unavailable' in lower:
         errors.append('report contains an undocumented generic fallback')
 
@@ -117,6 +128,13 @@ def validate(path):
     card_ids={c.get('id') for c in primary_cards}
     for target in p.quick:
         if target not in card_ids: errors.append(f'quick pick points outside primary recommendations: {target}')
+
+    if 'tile.openstreetmap.org' in lower or 'unpkg.com/leaflet' in lower or 'l.tilelayer(' in lower:
+        errors.append('legacy Leaflet/OpenStreetMap runtime tile map is prohibited; use the portable map contract')
+    if 'data-map-engine="maplibre-pmtiles"' not in lower:
+        errors.append('map must declare the MapLibre/PMTiles engine')
+    if 'pmtiles://' not in lower:
+        errors.append('map must use a PMTiles source instead of per-tile OpenStreetMap requests')
 
     m=re.search(r'<script id="where-id-eat-map-data" type="application/json">([\s\S]*?)</script>',text,re.I)
     if not m: errors.append('missing map data JSON')
