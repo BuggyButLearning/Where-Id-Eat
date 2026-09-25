@@ -1,0 +1,12 @@
+{
+  "name": "where-id-eat",
+  "version": "2.0.0",
+  "description": "Personalized travel food guides with ranked picks, live availability checks, maps, Yelp, coffee, and dessert.",
+  "author": {
+    "name": "BuggyButLearning"
+  },
+  "homepage": "https://github.com/BuggyButLearning/Where-Id-Eat",
+  "repository": "https://github.com/BuggyButLearning/Where-Id-Eat",
+  "license": "MIT",
+  "skills": "./skills/claude/"
+}

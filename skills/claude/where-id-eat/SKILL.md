@@ -27,11 +27,11 @@ Exclude unresolved closures before ranking.
 
 ## Data contract
 
-Populate `schema/report.schema.json` in a repository checkout or `runtime/schema/report.schema.json` in an installed package. Do not write HTML directly.
+Populate `schema/report.schema.json` in a repository checkout or plugin install, or `runtime/schema/report.schema.json` in an installed package. Do not write HTML directly.
 
 Do not assign ranks. Provide one final score. The renderer sorts the recommendations and assigns rank deterministically.
 
-Use `profiles/default.json` or `runtime/profiles/default.json` unless the user chose an interview.
+Use `profiles/default.json` (repository or plugin) or `runtime/profiles/default.json` (installed package) unless the user chose an interview.
 
 ## Build
 
@@ -41,10 +41,16 @@ Repository checkout:
 python bin/where-id-eat build report.json report.html
 ```
 
-Installed package:
+Installed package (zip upload or unzipped skill), run from this skill's base directory:
 
 ```bash
 python runtime/bin/where-id-eat build report.json report.html
+```
+
+Claude Code plugin install: there is no `runtime/` folder. The plugin root is three levels above this skill's base directory, so use:
+
+```bash
+python <skill base directory>/../../../bin/where-id-eat build report.json report.html
 ```
 
 Fix all validator errors. Undocumented SVG fallbacks, fallbacks with fewer than three photo-source checks, and missing image attribution are hard failures. The renderer owns report structure, section order, map behavior, tables, cards, buttons, and scoring presentation. Do not manually modify the generated HTML except to fix the canonical renderer itself.

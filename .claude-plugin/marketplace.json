@@ -1,0 +1,24 @@
+{
+  "name": "where-id-eat",
+  "owner": {
+    "name": "BuggyButLearning"
+  },
+  "metadata": {
+    "description": "Where I'd Eat: ranked, researched food guides around any hotel or address."
+  },
+  "plugins": [
+    {
+      "name": "where-id-eat",
+      "source": "./",
+      "description": "Personalized travel food guides with ranked picks, live availability checks, maps, Yelp, coffee, and dessert.",
+      "version": "2.0.0",
+      "license": "MIT",
+      "keywords": [
+        "food",
+        "travel",
+        "restaurants",
+        "guide"
+      ]
+    }
+  ]
+}

@@ -32,40 +32,50 @@ Real photography remains the default. The image search ladder now explicitly req
 
 ## Install
 
-Clone the repo:
+### Claude app (claude.ai, Claude Desktop, Claude mobile)
+
+1. Download **[where-id-eat-claude.zip](https://github.com/BuggyButLearning/Where-Id-Eat/releases/latest/download/where-id-eat-claude.zip)**. Leave it zipped.
+2. In Claude, open **Settings → Capabilities** and make sure **Code execution and file creation** is turned on. The skill needs it to build the report.
+3. In the **Skills** section of the same page, click **Upload skill** and pick the zip.
+4. Make sure the **where-id-eat** toggle is on.
+
+Skills sync to your account, so uploading once on the web also covers the desktop and mobile apps. Nothing needs to be registered and no API key is required. If you do not see a Skills section, your plan or organization does not have Skills turned on. On Team and Enterprise plans, an owner may need to enable skills first, and can also provision this one for everyone.
+
+To update, download the latest zip, delete the old skill, and upload again.
+
+### Claude Code
+
+Install it as a plugin straight from this repo:
+
+```text
+/plugin marketplace add BuggyButLearning/Where-Id-Eat
+/plugin install where-id-eat@where-id-eat
+```
+
+Get updates with `/plugin marketplace update where-id-eat`.
+
+Or, without the plugin system, unzip the same package into your skills folder:
+
+```bash
+mkdir -p ~/.claude/skills
+unzip where-id-eat-claude.zip -d ~/.claude/skills
+```
+
+For a project-only install, unzip it under `.claude/skills` instead.
+
+### ChatGPT
+
+Download **[where-id-eat-chatgpt.zip](https://github.com/BuggyButLearning/Where-Id-Eat/releases/latest/download/where-id-eat-chatgpt.zip)** and upload it in the ChatGPT Skills UI.
+
+### Build the packages yourself
 
 ```bash
 git clone https://github.com/BuggyButLearning/Where-Id-Eat.git
 cd Where-Id-Eat
-```
-
-Build self-contained skill packages:
-
-```bash
 python tools/package_skills.py
 ```
 
-This creates:
-
-```text
-dist/chatgpt/where-id-eat.zip
-dist/claude/where-id-eat.zip
-```
-
-### ChatGPT
-
-Upload `dist/chatgpt/where-id-eat.zip` in the ChatGPT Skills UI.
-
-### Claude Code
-
-Unzip the Claude package into your user skills directory:
-
-```bash
-mkdir -p ~/.claude/skills
-unzip dist/claude/where-id-eat.zip -d ~/.claude/skills
-```
-
-For a project-only install, unzip it under `.claude/skills` instead.
+This creates `dist/claude/where-id-eat.zip` and `dist/chatgpt/where-id-eat.zip`. Pushing a `v*` tag builds the same zips and attaches them to a GitHub release.
 
 ## Use it
 
