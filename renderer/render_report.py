@@ -143,6 +143,40 @@ def offline_map(data, primary, companion):
     def xy(x, y):
         return (width / 2 + (x - cx) * scale, height / 2 - (y - cy) * scale)
 
+    base = []
+    for label, name, rid, x, y, kind in projected:
+        px, py = xy(x, y)
+        base.append({"label": label, "name": name, "rid": rid, "kind": kind, "base_x": px, "base_y": py, "x": px, "y": py})
+
+    # Fan out markers that would visually overlap. Keep a dashed leader line back
+    # to the true relative position so the proximity map remains honest.
+    remaining = set(range(len(base)))
+    clusters = []
+    while remaining:
+        seed = remaining.pop()
+        cluster = {seed}
+        changed = True
+        while changed:
+            changed = False
+            for j in list(remaining):
+                if any(math.hypot(base[j]["base_x"] - base[k]["base_x"], base[j]["base_y"] - base[k]["base_y"]) < 44 for k in cluster):
+                    remaining.remove(j)
+                    cluster.add(j)
+                    changed = True
+        clusters.append(sorted(cluster))
+
+    for cluster in clusters:
+        if len(cluster) <= 1:
+            continue
+        group_x = sum(base[i]["base_x"] for i in cluster) / len(cluster)
+        group_y = sum(base[i]["base_y"] for i in cluster) / len(cluster)
+        radius = 36 if len(cluster) <= 3 else 46
+        start = -math.pi / 2
+        for n, i in enumerate(cluster):
+            angle = start + (2 * math.pi * n / len(cluster))
+            base[i]["x"] = min(width - margin, max(margin, group_x + radius * math.cos(angle)))
+            base[i]["y"] = min(height - margin, max(margin, group_y + radius * math.sin(angle)))
+
     grid = []
     for x in range(100, width, 100):
         grid.append(f'<line x1="{x}" y1="0" x2="{x}" y2="{height}" class="offline-grid"/>')
@@ -150,22 +184,23 @@ def offline_map(data, primary, companion):
         grid.append(f'<line x1="0" y1="{y}" x2="{width}" y2="{y}" class="offline-grid"/>')
 
     markers = []
-    for label, name, rid, x, y, kind in projected:
-        px, py = xy(x, y)
-        cls = "offline-marker anchor" if kind == "anchor" else ("offline-marker companion" if kind == "companion" else "offline-marker")
+    for p in base:
+        if math.hypot(p["x"] - p["base_x"], p["y"] - p["base_y"]) > 2:
+            markers.append(f'<line x1="{p["base_x"]:.1f}" y1="{p["base_y"]:.1f}" x2="{p["x"]:.1f}" y2="{p["y"]:.1f}" class="offline-leader"/>')
+        cls = "offline-marker anchor" if p["kind"] == "anchor" else ("offline-marker companion" if p["kind"] == "companion" else "offline-marker")
         body = (
-            f'<g class="{cls}" transform="translate({px:.1f},{py:.1f})">'
-            f'<circle r="18"></circle><text text-anchor="middle" dy=".35em">{e(label)}</text>'
-            f'<title>{e(name)}</title></g>'
+            f'<g class="{cls}" transform="translate({p["x"]:.1f},{p["y"]:.1f})">'
+            f'<circle r="20"></circle><text text-anchor="middle" dy=".35em">{e(p["label"])}</text>'
+            f'<title>{e(p["name"])}</title></g>'
         )
-        markers.append(f'<a href="#{e(rid)}">{body}</a>' if rid else body)
+        markers.append(f'<a href="#{e(p["rid"])}">{body}</a>' if p["rid"] else body)
 
     return (
         f'<svg viewBox="0 0 {width} {height}" role="img" aria-label="Offline proximity map showing relative positions from {e(anchor["name"])}">'
         f'<rect width="{width}" height="{height}" class="offline-bg"/>'
         + "".join(grid)
-        + f'<text x="28" y="38" class="offline-title">Offline proximity map</text>'
-        + f'<text x="28" y="66" class="offline-note">Relative positions remain available when the live basemap is blocked. Use Google Maps buttons for street-level routing.</text>'
+        + f'<text x="28" y="40" class="offline-title">Offline proximity map</text>'
+        + f'<text x="28" y="70" class="offline-note">Relative positions stay available when the live basemap is blocked. Overlapping markers are fanned out with leader lines.</text>'
         + "".join(markers)
         + '</svg>'
     )
