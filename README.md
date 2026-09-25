@@ -25,7 +25,8 @@ That keeps maps, tables, cards, photography, Yelp data, availability checks, cof
 - Real location or destination-food photography for the hero
 - Direct Yelp business links and verified ratings when available
 - Official site, menu, directions, reservations, and local editorial sources
-- Anchor-centered interactive map and mobile-friendly HTML
+- Anchor-centered map using MapLibre + PMTiles when available, with a fully embedded offline proximity-map fallback for downloaded HTML
+- No direct runtime requests to OpenStreetMap tile servers
 
 Real photography remains the default. The image search ladder now explicitly requires the official restaurant site, Yelp, and at least one other independent current source before fallback. If Yelp blocks automated access, the attempted Yelp business or photo URL is still recorded as part of the search evidence. If a usable photo cannot be found after those checks, the report may use a simple generated SVG fallback for that recommendation. The fallback is allowed only when the research evidence is recorded in the JSON contract.
 
@@ -96,7 +97,7 @@ python runtime/bin/where-id-eat build report.json report.html
 
 The source of truth is [`schema/report.schema.json`](schema/report.schema.json). The renderer sorts by one final score and assigns ranks, so the displayed score and rank cannot disagree.
 
-The validators fail reports with missing required sections, too few recommendations, undocumented image fallbacks, missing links, unresolved anchors, incomplete availability evidence, map/card count mismatches, or invalid Yelp state. Even the `render` command validates input before rendering.
+The validators fail reports with missing required sections, too few recommendations, undocumented image fallbacks, missing links, unresolved anchors, incomplete availability evidence, map/card count mismatches, legacy Leaflet/OpenStreetMap runtime tile maps, missing offline map fallback, or invalid Yelp state. Even the `render` command validates input before rendering.
 
 Do not use old generated HTML as the source for a new report or map experiment. Use schema-valid JSON or research again so legacy placeholders cannot leak into current output.
 
