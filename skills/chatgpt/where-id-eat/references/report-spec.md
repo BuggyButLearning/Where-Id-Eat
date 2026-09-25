@@ -22,6 +22,15 @@ Every active recommendation requires one final score, official website, directio
 
 Ranks are renderer-generated from final score. Never type ranks into research JSON.
 
+Map rules:
+
+- The downloaded HTML must remain useful when opened directly from disk.
+- The preferred live map uses MapLibre with a PMTiles basemap and does not request individual OpenStreetMap tiles.
+- Every report must also contain an embedded offline proximity map generated from the anchor and recommendation coordinates.
+- If live scripts, PMTiles, or network access are blocked, the offline map remains visible automatically.
+- Google Maps links remain available for street-level directions.
+- Legacy Leaflet + tile.openstreetmap.org maps are prohibited.
+
 Image rules:
 
 - The hero must use a real location or destination-food photograph.
